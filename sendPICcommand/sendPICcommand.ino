@@ -4,8 +4,8 @@
  
 void setup() {
 
-  // initialize serial communications at 115200 bps:
-  Serial.begin(115200);
+  // initialize serial communications at 4800 bps:
+  Serial.begin(4800);
   Serial.println("Starting...");
   
   // check empty eeprom
@@ -28,12 +28,12 @@ void checkEmptyEeprom() {
   uint8_t answer = 0;
 
   // checks if PIC is reading an empty EEPROM for 5 seconds
-  answer = sendPICcommand("99 000", "500:255|", 5000) || sendPICcommand("99 000", "1000:255|", 5000);
+  answer = sendPICcommand("99 000", "500: 255|", 5000) || sendPICcommand("99 000", "1000: 255|", 5000);
   if (answer == 0)
   {
     // waits for an answer from the module
     while (answer == 0) {   // sendPICcommand every two seconds and wait for the answer
-	  answer = sendPICcommand("99 000", "500:255|", 2000) || sendPICcommand("99 000", "1000:255|", 2000);
+	  answer = sendPICcommand("99 000", "500: 255|", 2000) || sendPICcommand("99 000", "1000: 255|", 2000);
     }
   }
 
