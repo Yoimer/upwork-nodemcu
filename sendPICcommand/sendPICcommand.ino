@@ -4,8 +4,8 @@
  
 void setup() {
 
-  // initialize serial communications at 4800 bps:
-  Serial.begin(4800);
+  // initialize serial communications at 2400 bps:
+  Serial.begin(2400);
   Serial.println("Starting...");
   
   // check empty eeprom
