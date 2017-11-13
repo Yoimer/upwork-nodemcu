@@ -42,7 +42,7 @@ const char INDEX_HTML[] =
 "LED<br>"
 "<INPUT type=\"radio\" name=\"LED\" value=\"1\">On<BR>"
 "<INPUT type=\"radio\" name=\"LED\" value=\"0\">Off<BR>"
-"<INPUT type=\"radio\" name=\"DUMP\" value=\"xxx\">JJJ<BR>"
+"<INPUT type=\"radio\" name=\"DUMP\" value=\"DUMP\">Dump Eeprom<BR>"
 "<INPUT type=\"submit\" value=\"Send\"> <INPUT type=\"reset\">"
 "</P>"
 "</FORM>"
@@ -95,7 +95,7 @@ void loop(void)
 /////////////////////////////////////////////////////
 void handleRoot()
 {
-  if (server.hasArg("LED")) {
+  if (server.hasArg("LED") || server.hasArg("DUMP") ) {
     handleSubmit();
   }
   else {
@@ -114,21 +114,33 @@ void returnFail(String msg)
 /////////////////////////////////////////////////////
 void handleSubmit()
 {
-  String LEDvalue;
+    String LEDvalue;
+	String DUMPvalue;
 
-  if (!server.hasArg("LED")) return returnFail("BAD ARGS");
-  LEDvalue = server.arg("LED");
-  if (LEDvalue == "1") {
-    writeLED(true);
-    server.send(200, "text/html", INDEX_HTML);
-  }
-  else if (LEDvalue == "0") {
-    writeLED(false);
-    server.send(200, "text/html", INDEX_HTML);
-  }
-  else {
-    returnFail("Bad LED value");
-  }
+   //if (!server.hasArg("LED")) return returnFail("BAD ARGS");
+	if (server.hasArg("LED"))
+	{
+		LEDvalue = server.arg("LED");
+		if (LEDvalue == "1") {
+			writeLED(true);
+			server.send(200, "text/html", INDEX_HTML);
+		}
+		else if (LEDvalue == "0") {
+			writeLED(false);
+			server.send(200, "text/html", INDEX_HTML);
+		}
+		else {
+			returnFail("Bad LED value");
+		}
+	}
+	else if(server.hasArg("DUMP"))
+	{
+		DUMPvalue = server.arg("DUMP");
+		//processDump();
+		server.sendHeader("Connection", "close");
+		server.sendHeader("Access-Control-Allow-Origin", "*");
+		server.send(200, "text/plain", "Dumping Eeprom\r\n");
+	}
 }
 
 ///////////////////////////////////////////////////
