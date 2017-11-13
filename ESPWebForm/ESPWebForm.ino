@@ -42,6 +42,7 @@ const char INDEX_HTML[] =
 "LED<br>"
 "<INPUT type=\"radio\" name=\"LED\" value=\"1\">On<BR>"
 "<INPUT type=\"radio\" name=\"LED\" value=\"0\">Off<BR>"
+"<INPUT type=\"radio\" name=\"DUMP\" value=\"xxx\">JJJ<BR>"
 "<INPUT type=\"submit\" value=\"Send\"> <INPUT type=\"reset\">"
 "</P>"
 "</FORM>"
@@ -50,96 +51,6 @@ const char INDEX_HTML[] =
 
 // GPIO#0 is for Adafruit ESP8266 HUZZAH board. Your board LED might be on 13.
 //const int LED_BUILTIN = HIGH;
-
-void handleRoot()
-{
-  if (server.hasArg("LED")) {
-    handleSubmit();
-  }
-  else {
-    server.send(200, "text/html", INDEX_HTML);
-  }
-}
-
-void returnFail(String msg)
-{
-  server.sendHeader("Connection", "close");
-  server.sendHeader("Access-Control-Allow-Origin", "*");
-  server.send(500, "text/plain", msg + "\r\n");
-}
-
-void handleSubmit()
-{
-  String LEDvalue;
-
-  if (!server.hasArg("LED")) return returnFail("BAD ARGS");
-  LEDvalue = server.arg("LED");
-  if (LEDvalue == "1") {
-    writeLED(true);
-    server.send(200, "text/html", INDEX_HTML);
-  }
-  else if (LEDvalue == "0") {
-    writeLED(false);
-    server.send(200, "text/html", INDEX_HTML);
-  }
-  else {
-    returnFail("Bad LED value");
-  }
-}
-
-void returnOK()
-{
-  server.sendHeader("Connection", "close");
-  server.sendHeader("Access-Control-Allow-Origin", "*");
-  server.send(200, "text/plain", "OK\r\n");
-}
-
-/*
- * Imperative to turn the LED on using a non-browser http client.
- * For example, using wget.
- * $ wget http://esp8266webform/ledon
- */
-void handleLEDon()
-{
-  writeLED(true);
-  returnOK();
-}
-
-/*
- * Imperative to turn the LED off using a non-browser http client.
- * For example, using wget.
- * $ wget http://esp8266webform/ledoff
- */
-void handleLEDoff()
-{
-  writeLED(false);
-  returnOK();
-}
-
-void handleNotFound()
-{
-  String message = "File Not Found\n\n";
-  message += "URI: ";
-  message += server.uri();
-  message += "\nMethod: ";
-  message += (server.method() == HTTP_GET)?"GET":"POST";
-  message += "\nArguments: ";
-  message += server.args();
-  message += "\n";
-  for (uint8_t i=0; i<server.args(); i++){
-    message += " " + server.argName(i) + ": " + server.arg(i) + "\n";
-  }
-  server.send(404, "text/plain", message);
-}
-
-void writeLED(bool LEDon)
-{
-  // Note inverted logic for Adafruit HUZZAH board
-  if (LEDon)
-    digitalWrite(LED_BUILTIN, LOW);
-  else
-    digitalWrite(LED_BUILTIN, HIGH);
-}
 
 void setup(void)
 {
@@ -175,7 +86,106 @@ void setup(void)
   Serial.println(WiFi.localIP());
 }
 
+/////////////////////////////////////////////////////
 void loop(void)
 {
   server.handleClient();
+}
+
+/////////////////////////////////////////////////////
+void handleRoot()
+{
+  if (server.hasArg("LED")) {
+    handleSubmit();
+  }
+  else {
+    server.send(200, "text/html", INDEX_HTML);
+  }
+}
+
+//////////////////////////////////////////////////////
+void returnFail(String msg)
+{
+  server.sendHeader("Connection", "close");
+  server.sendHeader("Access-Control-Allow-Origin", "*");
+  server.send(500, "text/plain", msg + "\r\n");
+}
+
+/////////////////////////////////////////////////////
+void handleSubmit()
+{
+  String LEDvalue;
+
+  if (!server.hasArg("LED")) return returnFail("BAD ARGS");
+  LEDvalue = server.arg("LED");
+  if (LEDvalue == "1") {
+    writeLED(true);
+    server.send(200, "text/html", INDEX_HTML);
+  }
+  else if (LEDvalue == "0") {
+    writeLED(false);
+    server.send(200, "text/html", INDEX_HTML);
+  }
+  else {
+    returnFail("Bad LED value");
+  }
+}
+
+///////////////////////////////////////////////////
+void returnOK()
+{
+  server.sendHeader("Connection", "close");
+  server.sendHeader("Access-Control-Allow-Origin", "*");
+  server.send(200, "text/plain", "OK\r\n");
+}
+
+///////////////////////////////////////////////////
+/*
+ * Imperative to turn the LED on using a non-browser http client.
+ * For example, using wget.
+ * $ wget http://esp8266webform/ledon
+ */
+void handleLEDon()
+{
+  writeLED(true);
+  returnOK();
+}
+
+///////////////////////////////////////////////////
+/*
+ * Imperative to turn the LED off using a non-browser http client.
+ * For example, using wget.
+ * $ wget http://esp8266webform/ledoff
+ */
+void handleLEDoff()
+{
+  writeLED(false);
+  returnOK();
+}
+
+//////////////////////////////////////////////////
+void handleNotFound()
+{
+  String message = "File Not Found\n\n";
+  message += "URI: ";
+  message += server.uri();
+  message += "\nMethod: ";
+  message += (server.method() == HTTP_GET)?"GET":"POST";
+  message += "\nArguments: ";
+  message += server.args();
+  message += "\n";
+  for (uint8_t i=0; i<server.args(); i++){
+    message += " " + server.argName(i) + ": " + server.arg(i) + "\n";
+  }
+  server.send(404, "text/plain", message);
+}
+
+///////////////////////////////////////////////
+void writeLED(bool LEDon)
+{
+  // Note inverted logic for Adafruit HUZZAH board
+  if (LEDon)
+    digitalWrite(LED_BUILTIN, LOW);
+  else
+    digitalWrite(LED_BUILTIN, HIGH);
 }
