@@ -19,9 +19,9 @@
 #include <ESP8266mDNS.h>
 
 // Fill in your WiFi router SSID and password
-const char* ssid = "Casa";
+/*const char* ssid = "Casa";
 const char* password = "remioy2006202";
-MDNSResponder mdns;
+MDNSResponder mdns;*/
 
 ESP8266WebServer server(80);
 
@@ -58,11 +58,11 @@ void setup(void)
   writeLED(true);
 
   Serial.begin(115200);
-  WiFi.begin(ssid, password);
+  //WiFi.begin(ssid, password);
   Serial.println("");
 
   // Wait for connection
-  while (WiFi.status() != WL_CONNECTED) {
+  /*while (WiFi.status() != WL_CONNECTED) {
     delay(500);
     Serial.print(".");
   }
@@ -74,7 +74,7 @@ void setup(void)
 
   if (mdns.begin("esp8266WebForm", WiFi.localIP())) {
     Serial.println("MDNS responder started");
-  }
+  }*/
 
   server.on("/", handleRoot);
   server.on("/ledon", handleLEDon);
@@ -82,8 +82,8 @@ void setup(void)
   server.onNotFound(handleNotFound);
 
   server.begin();
-  Serial.print("Connect to http://esp8266WebForm.local or http://");
-  Serial.println(WiFi.localIP());
+  /*Serial.print("Connect to http://esp8266WebForm.local or http://");
+  Serial.println(WiFi.localIP());*/
 }
 
 /////////////////////////////////////////////////////
@@ -117,7 +117,6 @@ void handleSubmit()
     String LEDvalue;
 	String DUMPvalue;
 
-   //if (!server.hasArg("LED")) return returnFail("BAD ARGS");
 	if (server.hasArg("LED"))
 	{
 		LEDvalue = server.arg("LED");
@@ -136,10 +135,13 @@ void handleSubmit()
 	else if(server.hasArg("DUMP"))
 	{
 		DUMPvalue = server.arg("DUMP");
-		//processDump();
+		
 		server.sendHeader("Connection", "close");
 		server.sendHeader("Access-Control-Allow-Origin", "*");
 		server.send(200, "text/plain", "Dumping Eeprom\r\n");
+		// this function is meant to check a full eeprom
+		//checkFullEeprom();
+		Serial.println("Testing DUMP");
 	}
 }
 
