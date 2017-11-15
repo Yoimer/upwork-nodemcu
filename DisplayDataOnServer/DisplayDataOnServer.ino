@@ -3,9 +3,12 @@
 #include <ESP8266WebServer.h>
  
 // Replace with your network credentials
-const char* ssid = "<Your WiFI SSID>";
-const char* password = "<Your WiFI Password>";
- 
+//const char* ssid = "<Your WiFI SSID>";
+//const char* password = "<Your WiFI Password>";
+
+const char* ssid = "Casa";
+const char* password = "remioy2006202";
+
 ESP8266WebServer server(80);   //instantiate server at port 80 (http port)
  
 String page = "";
@@ -39,7 +42,8 @@ void setup(void){
 }
  
 void loop(void){
-  data = analogRead(A0);
+  //data = analogRead(A0);
+  data = millis();
   delay(1000);
   server.handleClient();
 }
