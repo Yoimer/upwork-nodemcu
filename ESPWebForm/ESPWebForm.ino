@@ -19,7 +19,7 @@
 #include <ESP8266mDNS.h>
 
 // define timeout for expected answer from PIC
-#define TIMEOUT 30000
+#define TIMEOUT 2000
 
 ESP8266WebServer server(80);
 
@@ -127,11 +127,11 @@ void handleSubmit()
 			Serial.println("eeprom is empty");
 		}else {
 				Serial.println("reading eeprom");
-				// show buffer received from PIC
-				// "592:" is not an expected answer from PIC
-				// so, during timeout; PIC will just fill ESP8266 buffer
-				// and later printed on console
-				sendPICcommand("99 000", "592:", TIMEOUT, 1);
+				// show data saved in PIC
+				// E is the expected last char
+				// it reads every char before getting to
+				// E and displays it on console
+				sendPICcommand("99 000", "E", TIMEOUT, 1);
 			}
 	}
 }
