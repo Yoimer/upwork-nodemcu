@@ -121,7 +121,7 @@ void handleSubmit()
 
 		uint8_t answer = 0;
 		// check empty eeprom
-		answer = sendPICcommand("99 000", "500: 255|", TIMEOUT, 0) || sendPICcommand("99 000", "1000: 255|", TIMEOUT, 0);
+		answer = sendPICcommand("99 000", "500: 255-", TIMEOUT, 0) || sendPICcommand("99 000", "1000: 255-", TIMEOUT, 0);
 		
 		if (answer == 1) {
 			Serial.println("eeprom is empty");
