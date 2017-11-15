@@ -55,7 +55,7 @@ void setup(void)
   pinMode(LED_BUILTIN, OUTPUT);
   writeLED(true);
 
-  Serial.begin(115200);
+  Serial.begin(2400);
   Serial.println("");
 
   server.on("/", handleRoot);
