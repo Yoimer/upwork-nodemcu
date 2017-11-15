@@ -32,7 +32,8 @@ void checkEmptyEeprom() {
   if (answer == 0)
   {
     // waits for an answer from the module
-    while (answer == 0) {   // sendPICcommand every two seconds and wait for the answer
+	// sendPICcommand every two seconds and wait for the answer
+    while (answer == 0) {   
 	  answer = sendPICcommand("99 000", "500: 255|", 2000) || sendPICcommand("99 000", "1000: 255|", 2000);
     }
   }

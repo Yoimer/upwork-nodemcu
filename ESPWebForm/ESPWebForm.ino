@@ -18,10 +18,8 @@
 #include <ESP8266WebServer.h>
 #include <ESP8266mDNS.h>
 
-// Fill in your WiFi router SSID and password
-/*const char* ssid = "Casa";
-const char* password = "remioy2006202";
-MDNSResponder mdns;*/
+// define timeout for expected answer from PIC
+#define TIMEOUT 30000
 
 ESP8266WebServer server(80);
 
@@ -58,32 +56,14 @@ void setup(void)
   writeLED(true);
 
   Serial.begin(115200);
-  //WiFi.begin(ssid, password);
   Serial.println("");
-
-  // Wait for connection
-  /*while (WiFi.status() != WL_CONNECTED) {
-    delay(500);
-    Serial.print(".");
-  }
-  Serial.println("");
-  Serial.print("Connected to ");
-  Serial.println(ssid);
-  Serial.print("IP address: ");
-  Serial.println(WiFi.localIP());
-
-  if (mdns.begin("esp8266WebForm", WiFi.localIP())) {
-    Serial.println("MDNS responder started");
-  }*/
 
   server.on("/", handleRoot);
   server.on("/ledon", handleLEDon);
   server.on("/ledoff", handleLEDoff);
   server.onNotFound(handleNotFound);
-
   server.begin();
-  /*Serial.print("Connect to http://esp8266WebForm.local or http://");
-  Serial.println(WiFi.localIP());*/
+  
 }
 
 /////////////////////////////////////////////////////
@@ -135,13 +115,24 @@ void handleSubmit()
 	else if(server.hasArg("DUMP"))
 	{
 		DUMPvalue = server.arg("DUMP");
-		
 		server.sendHeader("Connection", "close");
 		server.sendHeader("Access-Control-Allow-Origin", "*");
 		server.send(200, "text/plain", "Dumping Eeprom\r\n");
-		// this function is meant to check a full eeprom
-		//checkFullEeprom();
-		Serial.println("Testing DUMP");
+
+		uint8_t answer = 0;
+		// check empty eeprom
+		answer = sendPICcommand("99 000", "500: 255|", TIMEOUT, 0) || sendPICcommand("99 000", "1000: 255|", TIMEOUT, 0);
+		
+		if (answer == 1) {
+			Serial.println("eeprom is empty");
+		}else {
+				Serial.println("reading eeprom");
+				// show buffer received from PIC
+				// "592:" is not an expected answer from PIC
+				// so, during timeout; PIC will just fill ESP8266 buffer
+				// and later printed on console
+				sendPICcommand("99 000", "592:", TIMEOUT, 1);
+			}
 	}
 }
 
@@ -202,4 +193,48 @@ void writeLED(bool LEDon)
     digitalWrite(LED_BUILTIN, LOW);
   else
     digitalWrite(LED_BUILTIN, HIGH);
+}
+
+/////////////////////////////////////////////////////////////////
+int8_t sendPICcommand(char* PICcommand, char* expected_answer, unsigned int timeout, int show_response) {
+
+  uint8_t x = 0,  answer = 0;
+  char response[100];
+  unsigned long previous;
+
+  memset(response, '\0', 100);    // Initialize the string
+
+  delay(100);
+
+  //while ( Serial.available() > 0) Serial.read();   // Clean the input buffer
+
+  while (Serial.available()) { //Cleans the input buffer
+    Serial.read();
+  }
+
+  Serial.println(PICcommand);    // Send the PIC command
+  x = 0;
+  previous = millis();
+
+  // this loop waits for the answer
+  do {
+    if (Serial.available() != 0) {
+      // if there are data in the UART input buffer, reads it and checks for the asnwer
+      response[x] = Serial.read();
+      x++;
+      // check if the desired answer  is in the response of the module
+      if (strstr(response, expected_answer) != NULL)
+      {
+        answer = 1;
+      }
+    }
+    // Waits for the asnwer with time out
+  } while ((answer == 0) && ((millis() - previous) < timeout));
+  
+  if (show_response == 1) {
+	  Serial.println(response);
+	  Serial.println(answer);
+  }
+
+  return answer;
 }
