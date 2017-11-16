@@ -12,16 +12,21 @@
  * $ wget http://esp8266webform.local/ledon
  * $ wget http://esp8266webform.local/ledoff
 */
-
 #include <ESP8266WiFi.h>
-#include <WiFiClient.h>
 #include <ESP8266WebServer.h>
-#include <ESP8266mDNS.h>
+#include <DNSServer.h>
 
 // define timeout for expected answer from PIC
 #define TIMEOUT 2000
 
+// Start DNS svr
+const byte DNS_PORT = 53;
+IPAddress apIP(192,168,4,1);
+DNSServer dnsServer;
+
+// Start Web svr
 ESP8266WebServer server(80);
+
 
 const char INDEX_HTML[] =
 "<!DOCTYPE HTML>"
@@ -47,10 +52,6 @@ const char INDEX_HTML[] =
 "</body>"
 "</html>";
 
-String page = "";
-
-String raw_data = "";
-
 // GPIO#0 is for Adafruit ESP8266 HUZZAH board. Your board LED might be on 13.
 //const int LED_BUILTIN = HIGH;
 
@@ -62,17 +63,22 @@ void setup(void)
   Serial.begin(2400);
   Serial.println("");
 
+  // reply with IP to "*" domain name request
+  dnsServer.start(DNS_PORT, "*", apIP);
+
   server.on("/", handleRoot);
   server.on("/ledon", handleLEDon);
   server.on("/ledoff", handleLEDoff);
-  server.onNotFound(handleNotFound);
+  //server.onNotFound(handleNotFound);
+  server.onNotFound(handleRoot);
   server.begin();
-  
+
 }
 
 /////////////////////////////////////////////////////
 void loop(void)
 {
+  dnsServer.processNextRequest();
   server.handleClient();
 }
 
@@ -99,45 +105,45 @@ void returnFail(String msg)
 void handleSubmit()
 {
     String LEDvalue;
-	String DUMPvalue;
+  String DUMPvalue;
 
-	if (server.hasArg("LED"))
-	{
-		LEDvalue = server.arg("LED");
-		if (LEDvalue == "1") {
-			writeLED(true);
-			server.send(200, "text/html", INDEX_HTML);
-		}
-		else if (LEDvalue == "0") {
-			writeLED(false);
-			server.send(200, "text/html", INDEX_HTML);
-		}
-		else {
-			returnFail("Bad LED value");
-		}
-	}
-	else if(server.hasArg("DUMP"))
-	{
-		DUMPvalue = server.arg("DUMP");
-		server.sendHeader("Connection", "close");
-		server.sendHeader("Access-Control-Allow-Origin", "*");
+  if (server.hasArg("LED"))
+  {
+    LEDvalue = server.arg("LED");
+    if (LEDvalue == "1") {
+      writeLED(true);
+      server.send(200, "text/html", INDEX_HTML);
+    }
+    else if (LEDvalue == "0") {
+      writeLED(false);
+      server.send(200, "text/html", INDEX_HTML);
+    }
+    else {
+      returnFail("Bad LED value");
+    }
+  }
+  else if(server.hasArg("DUMP"))
+  {
+    DUMPvalue = server.arg("DUMP");
+    server.sendHeader("Connection", "close");
+    server.sendHeader("Access-Control-Allow-Origin", "*");
+    server.send(200, "text/plain", "Dumping Eeprom\r\n");
 
-		uint8_t answer = 0;
-		// check empty eeprom
-		////answer = sendPICcommand("99 000", "500: 255-", TIMEOUT, 0) || sendPICcommand("99 000", "1000: 255-", TIMEOUT, 0);
-		if (answer == 1) {
-			Serial.println("eeprom is empty");
-		}else {
-				Serial.println("reading eeprom");
-				// show data saved in PIC
-				// E is the expected last char
-				// it reads every char before getting to
-				// E and displays it on console and browser too
-				sendPICcommand("99 000", "E", TIMEOUT, 1);
-				page = "<h1>Values saved on eeprom </h1><h3>Raw Data:</h3> <h4>"+raw_data+"</h4>";
-				server.send(200, "text/html", page);
-			}
-	}
+    uint8_t answer = 0;
+    // check empty eeprom
+    answer = sendPICcommand("99 000", "500: 255-", TIMEOUT, 0) || sendPICcommand("99 000", "1000: 255-", TIMEOUT, 0);
+    
+    if (answer == 1) {
+      Serial.println("eeprom is empty");
+    }else {
+        Serial.println("reading eeprom");
+        // show data saved in PIC
+        // E is the expected last char
+        // it reads every char before getting to
+        // E and displays it on console
+        sendPICcommand("99 000", "E", TIMEOUT, 1);
+      }
+  }
 }
 
 ///////////////////////////////////////////////////
@@ -203,7 +209,7 @@ void writeLED(bool LEDon)
 int8_t sendPICcommand(char* PICcommand, char* expected_answer, unsigned int timeout, int show_response) {
 
   uint8_t x = 0,  answer = 0;
-  char response[150];
+  char response[100];
   unsigned long previous;
 
   memset(response, '\0', 100);    // Initialize the string
@@ -236,13 +242,10 @@ int8_t sendPICcommand(char* PICcommand, char* expected_answer, unsigned int time
   } while ((answer == 0) && ((millis() - previous) < timeout));
   
   if (show_response == 1) {
-	  Serial.println(response);
-	  Serial.println(answer);
-	  raw_data = "";
-	  raw_data = String(response);
-	  Serial.println("Printing raw data: ");
-	  Serial.println(raw_data);
+    Serial.println(response);
+    Serial.println(answer);
   }
 
   return answer;
 }
+
