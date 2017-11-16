@@ -124,7 +124,7 @@ void handleSubmit()
 
 		uint8_t answer = 0;
 		// check empty eeprom
-		answer = sendPICcommand("99 000", "500: 255-", TIMEOUT, 0) || sendPICcommand("99 000", "1000: 255-", TIMEOUT, 0);
+		////answer = sendPICcommand("99 000", "500: 255-", TIMEOUT, 0) || sendPICcommand("99 000", "1000: 255-", TIMEOUT, 0);
 		if (answer == 1) {
 			Serial.println("eeprom is empty");
 		}else {
@@ -203,7 +203,7 @@ void writeLED(bool LEDon)
 int8_t sendPICcommand(char* PICcommand, char* expected_answer, unsigned int timeout, int show_response) {
 
   uint8_t x = 0,  answer = 0;
-  char response[100];
+  char response[150];
   unsigned long previous;
 
   memset(response, '\0', 100);    // Initialize the string
