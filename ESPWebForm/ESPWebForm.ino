@@ -52,6 +52,18 @@ const char INDEX_HTML[] =
 "</body>"
 "</html>";
 
+const char PICKUP_POLARITY[] =
+"<tr>"
+	"<td>"
+		"<FORM action=\"/\" method=\"get\">"
+			"<font color=blue>PICKUP POLARITY:</font><br>"
+			"<INPUT type=\"radio\" name=\"pos_00_adr_13_val\" value=\"00\">NP<font color=grey>(0)</font>"
+			"<INPUT type=\"radio\" name=\"pos_00_adr_13_val\" value=\"01\">checked>PN<font color=grey>(1)</font>"
+			"&nbsp; &nbsp; <INPUT type=\"submit\" value=\"Send to CDI\">"
+		"</FORM>"
+	"</td>"
+"</tr>";
+
 String page = "";
 
 String raw_data = "";
@@ -144,8 +156,9 @@ void handleSubmit()
         // E is the expected last char
         // it reads every char before getting to
         // E and displays it on console and browser too
-        sendPICcommand("99 000", "E", TIMEOUT, 1);
-		page = "<h1>Values saved on eeprom </h1><h3>Raw Data:</h3> <h4>"+raw_data+"</h4>";
+        ////sendPICcommand("99 000", "E", TIMEOUT, 1);
+		////page = "<h1>Values saved on eeprom </h1><h3>Raw Data:</h3> <h4>"+raw_data+"</h4>";
+		page = PICKUP_POLARITY;
 		server.send(200, "text/html", page);
       }
   }
