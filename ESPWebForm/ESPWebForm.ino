@@ -45,7 +45,7 @@ const char INDEX_HTML[] =
 				"LED<br>"
 				"<INPUT type=\"radio\" name=\"LED\" value=\"1\">On<BR>"
 				"<INPUT type=\"radio\" name=\"LED\" value=\"0\">Off<BR>"
-				"<INPUT type=\"radio\" name=\"DUMP\" value=\"DUMP\">Dump Eeprom<BR>"
+				"<INPUT type=\"radio\" name=\"DUMP\" value=\"DUMP\">Go to TRANSMIT.NET<BR>"
 				"<INPUT type=\"submit\" value=\"Send\"> <INPUT type=\"reset\">"
 			"</P>"
 		"</FORM>"
