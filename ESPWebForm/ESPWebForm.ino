@@ -58,11 +58,27 @@ const char PICKUP_POLARITY[] =
 		"<FORM action=\"/\" method=\"get\">"
 			"<font color=blue>PICKUP POLARITY:</font><br>"
 			"<INPUT type=\"radio\" name=\"pos_00_adr_13_val\" value=\"00\">NP<font color=grey>(0)</font>"
-			"<INPUT type=\"radio\" name=\"pos_00_adr_13_val\" value=\"01\">checked>PN<font color=grey>(1)</font>"
+			"<INPUT type=\"radio\" name=\"pos_00_adr_13_val\" value=\"01 checked>\">PN<font color=grey>(1)</font>"
 			"&nbsp; &nbsp; <INPUT type=\"submit\" value=\"Send to CDI\">"
 		"</FORM>"
 	"</td>"
-"</tr>";
+"</tr>"
+
+"<tfoot>"
+	"<td>"
+		"<div id=\"formularie\">"
+			"<FORM action=\"/dump\" method=\"post\">"
+				"<INPUT type=\"submit\" value =\"Dump Eprom\">"
+			"</FORM>"
+			"<FORM action=\"/\" method=\"post\">"
+				"<INPUT type=\"submit\" value =\"Home\">"
+			"</FORM>"
+			"<FORM action=\"/clear\" method=\"post\">"
+				"<INPUT type=\"submit\" value =\"Clear display\">"
+			"</FORM>"
+		"</div>"
+	"</td>"
+"</tfoot>";
 
 String page = "";
 
