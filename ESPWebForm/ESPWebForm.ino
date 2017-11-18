@@ -52,13 +52,16 @@ const char INDEX_HTML[] =
 	"</body>"
 "</html>";
 
+
+String valueToPic = "A-5-B-6";
+
 String PICKUP_POLARITY=
 "<tr>\r\n"
 "	<td>\r\n"
-"		<form action=\"/\" method=POST>\r\n"
+"		<form action=\"/\" method=GET>\r\n"
 "			<font color=blue>PICKUP POLARITY:</font><br>\r\n"
-"			<input type=\"Radio\" name=\"pos_00_adr_13_val\" value=\"00\">NP <font color=grey>(0)</font>\r\n"
-"			<input type=\"Radio\" name=\"pos_00_adr_13_val\" value=\"01\" checked>PN <font color=grey>(1)</font>\r\n"
+"			<input type=\"Radio\" name=\"" + valueToPic + "\" value=\"00\">NP <font color=grey>(0)</font>\r\n"
+"			<input type=\"Radio\" name=\"" + valueToPic + "\" value=\"01\" checked>PN <font color=grey>(1)</font>\r\n"
 "			&nbsp; &nbsp; <input type=submit value=\"Send to CDI\">\r\n"
 "		</form>\r\n"
 "	</td>\r\n"
@@ -117,7 +120,7 @@ void loop(void)
 /////////////////////////////////////////////////////
 void handleRoot()
 {
-  if (server.hasArg("LED") || server.hasArg("TRANSMIT") || server.hasArg("pos_00_adr_13_val")) {
+  if (server.hasArg("LED") || server.hasArg("TRANSMIT") || server.hasArg(valueToPic)) {
     handleSubmit();
   }
   else {
@@ -161,9 +164,11 @@ void handleSubmit()
 	page = PICKUP_POLARITY;
 	server.send(200, "text/html", page);
   }
-  else if (server.hasArg("pos_00_adr_13_val"))
+  //else if (server.hasArg("pos_00_adr_13_val"))
+	else if (server.hasArg(valueToPic))  
   {
-	  POS_ADR_VALvalue = server.arg("pos_00_adr_13_val");
+	  //POS_ADR_VALvalue = server.arg("pos_00_adr_13_val");
+	  POS_ADR_VALvalue = server.arg(valueToPic);
 	  if (POS_ADR_VALvalue == "01") {
 		  Serial.println(POS_ADR_VALvalue);
 	  }
