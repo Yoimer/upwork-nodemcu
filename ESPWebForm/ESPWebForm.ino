@@ -55,7 +55,7 @@ const char INDEX_HTML[] =
 const char PICKUP_POLARITY[] =
 "<tr>"
 	"<td>"
-		"<FORM action=\"/\" method=\"get\">"
+		"<FORM action=\"/\" method=\"post\">"
 			"<font color=blue>PICKUP POLARITY:</font><br>"
 			"<INPUT type=\"radio\" name=\"pos_00_adr_13_val\" value=\"00\">NP<font color=grey>(0)</font>"
 			"<INPUT type=\"radio\" name=\"pos_00_adr_13_val\" value=\"01\" checked>PN<font color=grey>(1)</font>"
@@ -137,17 +137,19 @@ void returnFail(String msg)
 void handleSubmit()
 {
   String LEDvalue;
-  String DUMPvalue;
+  String POS_ADR_VALvalue;
 
   if (server.hasArg("LED"))
   {
     LEDvalue = server.arg("LED");
     if (LEDvalue == "1") {
-      writeLED(true);
+      Serial.println(LEDvalue);
+	  writeLED(true);
       server.send(200, "text/html", INDEX_HTML);
     }
     else if (LEDvalue == "0") {
       writeLED(false);
+	  Serial.println(LEDvalue);
       server.send(200, "text/html", INDEX_HTML);
     }
     else {
@@ -156,36 +158,18 @@ void handleSubmit()
   }
   else if(server.hasArg("TRANSMIT"))
   {
-    DUMPvalue = server.arg("TRANSMIT");
-    server.sendHeader("Connection", "close");
-    server.sendHeader("Access-Control-Allow-Origin", "*");
 	page = PICKUP_POLARITY;
 	server.send(200, "text/html", page);
-
-    /*uint8_t answer = 0;
-    // check empty eeprom
-    ////answer = sendPICcommand("99 000", "500: 255-", TIMEOUT, 0) || sendPICcommand("99 000", "1000: 255-", TIMEOUT, 0);
-    
-    if (answer == 1) {
-      Serial.println("eeprom is empty");
-    }else {
-        ////Serial.println("reading eeprom");
-        // show data saved in PIC
-        // E is the expected last char
-        // it reads every char before getting to
-        // E and displays it on console and browser too
-        ////sendPICcommand("99 000", "E", TIMEOUT, 1);
-		////page = "<h1>Values saved on eeprom </h1><h3>Raw Data:</h3> <h4>"+raw_data+"</h4>";
-		page = PICKUP_POLARITY;
-		server.send(200, "text/html", page);
-		if(server.hasArg("pos_00_adr_13_val")) {
-			Serial.println("GET REQUEST!!!");
-		}
-      }*/
   }
   else if (server.hasArg("pos_00_adr_13_val"))
   {
-	  Serial.println("GET REQUEST");
+	  POS_ADR_VALvalue = server.arg("pos_00_adr_13_val");
+	  if (POS_ADR_VALvalue == "01") {
+		  Serial.println(POS_ADR_VALvalue);
+	  }
+	  else if (POS_ADR_VALvalue == "00") {
+		  Serial.println(POS_ADR_VALvalue);
+	  }
 	  page = PICKUP_POLARITY;
 	  server.send(200, "text/html", page);
   }
