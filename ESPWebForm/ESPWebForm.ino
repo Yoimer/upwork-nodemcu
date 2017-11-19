@@ -198,7 +198,8 @@ void handleDump()
 	// E is the expected last char
 	// it reads every char before getting to
 	// E and displays it on console and browser too
-	sendPICcommand("AT", "OK", TIMEOUT, 1);
+	//sendPICcommand("AT", "OK", TIMEOUT, 1);
+	sendPICcommand("99 000", "E", TIMEOUT, 1);
 	page = "<h1>Values saved on eeprom </h1><h3>Raw Data:</h3> <h4>"+raw_data+"</h4>";
 	server.send(200, "text/html", page);
 }
