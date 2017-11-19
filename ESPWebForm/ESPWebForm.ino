@@ -63,7 +63,7 @@ String valueToPic = addr + pos;
 String PICKUP_POLARITY=
 "<tr>\r\n"
 "	<td>\r\n"
-"		<form action=\"/\" method=GET>\r\n"
+"		<form action=\"/\" method=POST>\r\n"
 "			<font color=blue>PICKUP POLARITY:</font><br>\r\n"
 "			<input type=\"Radio\" name=\"" + valueToPic + "\" value=\"0\">NP <font color=grey>(0)</font>\r\n"
 "			<input type=\"Radio\" name=\"" + valueToPic + "\" value=\"1\" checked>PN <font color=grey>(1)</font>\r\n"
@@ -71,29 +71,26 @@ String PICKUP_POLARITY=
 "		</form>\r\n"
 "	</td>\r\n"
 "</tr>\r\n"
-"\r\n"
-"<tfoot>\r\n"
+"<foot>\r\n"
 "	<td>\r\n"
 "		<div id=\"formulaire\"> \r\n"
 "			<form action=\"/dump\" method=POST>\r\n"
-"				<input type=submit value=\"Dump Eprom\">\r\n"
+"				<input type=submit value=\"Dump\">\r\n"
 "			</form>\r\n"
 "			<form action=\"/\" method=POST>\r\n"
 "				<input type=submit value=\"Home\">\r\n"
 "			</form>\r\n"
-"			<form action=\"/clear\" method=POST>\r\n"
+"			<form action=\"/\" method=POST>\r\n"
 "				<input type=submit value=\"Clear display\">\r\n"
 "			</form>\r\n"
 "		</div>\r\n"
 "	</td>\r\n"
-"</tfoot>\r\n";
+"</foot>\r\n";
+
 
 String page = "";
 
 String raw_data = "";
-
-// GPIO#0 is for Adafruit ESP8266 HUZZAH board. Your board LED might be on 13.
-//const int LED_BUILTIN = HIGH;
 
 void setup(void)
 {
@@ -109,8 +106,10 @@ void setup(void)
   server.on("/", handleRoot);
   server.on("/ledon", handleLEDon);
   server.on("/ledoff", handleLEDoff);
+  server.on("/dump", handleDump); 
   //server.onNotFound(handleNotFound);
   server.onNotFound(handleRoot);
+  
   server.begin();
 
 }
@@ -127,6 +126,9 @@ void handleRoot()
 {
   if (server.hasArg("LED") || server.hasArg("TRANSMIT") || server.hasArg(valueToPic)) {
     handleSubmit();
+  }
+  else if ((server.hasArg("Dump"))) {
+	  handleDump();
   }
   else {
     server.send(200, "text/html", INDEX_HTML);
@@ -170,28 +172,35 @@ void handleSubmit()
 	page = PICKUP_POLARITY;
 	server.send(200, "text/html", page);
   }
-  //else if (server.hasArg("pos_00_adr_13_val"))
 	else if (server.hasArg(valueToPic))  
   {
-	  //POS_ADR_VALvalue = server.arg("pos_00_adr_13_val");
 	  POS_ADR_VALvalue = server.arg(valueToPic);
 	  if (POS_ADR_VALvalue == "1") {
 		  Serial.println(POS_ADR_VALvalue);
-		  //Serial.println(valueToPic + POS_ADR_VALvalue);
 		  valueToSend = valueToPic + POS_ADR_VALvalue;
 		  Serial.println(valueToSend);
-		  
 	  }
 	  else if (POS_ADR_VALvalue == "0") {
 		  Serial.println(POS_ADR_VALvalue);
-		  //Serial.println(valueToPic + POS_ADR_VALvalue); 
 		  valueToSend = valueToPic + POS_ADR_VALvalue;
 		  Serial.println(valueToSend);
-		 
 	  }
 	  page = PICKUP_POLARITY;
 	  server.send(200, "text/html", page);
   }
+
+}
+
+///////////////////////////////////////////////////
+void handleDump()
+{
+	// show data saved in PIC
+	// E is the expected last char
+	// it reads every char before getting to
+	// E and displays it on console and browser too
+	sendPICcommand("AT", "OK", TIMEOUT, 1);
+	page = "<h1>Values saved on eeprom </h1><h3>Raw Data:</h3> <h4>"+raw_data+"</h4>";
+	server.send(200, "text/html", page);
 }
 
 ///////////////////////////////////////////////////
