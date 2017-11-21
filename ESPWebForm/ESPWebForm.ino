@@ -19,6 +19,7 @@
 // define timeout for expected answer from PIC
 #define TIMEOUT 2000
 
+const char *ssid = "transmic_cdi";
 // Start DNS svr
 const byte DNS_PORT = 53;
 IPAddress apIP(192,168,4,1);
@@ -31,25 +32,25 @@ ESP8266WebServer server(80);
 const char INDEX_HTML[] =
 "<!DOCTYPE HTML>"
 "<html>"
-	"<head>"
-	"<meta name = \"viewport\" content = \"width = device-width, initial-scale = 1.0, maximum-scale = 1.0, user-scalable=0\">"
-	"<title>ESP8266 Web Form Demo</title>"
-	"<style>"
-		"\"body { background-color: #808080; font-family: Arial, Helvetica, Sans-Serif; Color: #000000; }\""
-	"</style>"
-	"</head>"
-	"<body>"
-		"<h1>ESP8266 Web Form Demo</h1>"
-		"<FORM action=\"/\" method=\"post\">"
-			"<P>"
-				"LED<br>"
-				"<INPUT type=\"radio\" name=\"LED\" value=\"1\">On<BR>"
-				"<INPUT type=\"radio\" name=\"LED\" value=\"0\">Off<BR>"
-				"<INPUT type=\"radio\" name=\"TRANSMIT\" value=\"TRANSMIT\">Go to TRANSMIT.NET<BR>"
-				"<INPUT type=\"submit\" value=\"Send\"> <INPUT type=\"reset\">"
-			"</P>"
-		"</FORM>"
-	"</body>"
+  "<head>"
+  "<meta name = \"viewport\" content = \"width = device-width, initial-scale = 1.0, maximum-scale = 1.0, user-scalable=0\">"
+  "<title>ESP8266 Web Form Demo</title>"
+  "<style>"
+    "\"body { background-color: #808080; font-family: Arial, Helvetica, Sans-Serif; Color: #000000; }\""
+  "</style>"
+  "</head>"
+  "<body>"
+    "<h1>ESP8266 Web Form Demo</h1>"
+    "<FORM action=\"/\" method=\"post\">"
+      "<P>"
+        "LED<br>"
+        "<INPUT type=\"radio\" name=\"LED\" value=\"1\">On<BR>"
+        "<INPUT type=\"radio\" name=\"LED\" value=\"0\">Off<BR>"
+        "<INPUT type=\"radio\" name=\"TRANSMIT\" value=\"TRANSMIT\">Go to TRANSMIT.NET<BR>"
+        "<INPUT type=\"submit\" value=\"Send\"> <INPUT type=\"reset\">"
+      "</P>"
+    "</FORM>"
+  "</body>"
 "</html>";
 
 
@@ -62,29 +63,29 @@ String valueToPic = addr + pos;
 
 String PICKUP_POLARITY=
 "<tr>\r\n"
-"	<td>\r\n"
-"		<form action=\"/\" method=POST>\r\n"
-"			<font color=blue>PICKUP POLARITY:</font><br>\r\n"
-"			<input type=\"Radio\" name=\"" + valueToPic + "\" value=\"0\">NP <font color=grey>(0)</font>\r\n"
-"			<input type=\"Radio\" name=\"" + valueToPic + "\" value=\"1\" checked>PN <font color=grey>(1)</font>\r\n"
-"			&nbsp; &nbsp; <input type=submit value=\"Send to CDI\">\r\n"
-"		</form>\r\n"
-"	</td>\r\n"
+" <td>\r\n"
+"   <form action=\"/\" method=POST>\r\n"
+"     <font color=blue>PICKUP POLARITY:</font><br>\r\n"
+"     <input type=\"Radio\" name=\"" + valueToPic + "\" value=\"0\">NP <font color=grey>(0)</font>\r\n"
+"     <input type=\"Radio\" name=\"" + valueToPic + "\" value=\"1\" checked>PN <font color=grey>(1)</font>\r\n"
+"     &nbsp; &nbsp; <input type=submit value=\"Send to CDI\">\r\n"
+"   </form>\r\n"
+" </td>\r\n"
 "</tr>\r\n"
 "<foot>\r\n"
-"	<td>\r\n"
-"		<div id=\"formulaire\"> \r\n"
-"			<form action=\"/dump\" method=POST>\r\n"
-"				<input type=submit value=\"Dump\">\r\n"
-"			</form>\r\n"
-"			<form action=\"/\" method=POST>\r\n"
-"				<input type=submit value=\"Home\">\r\n"
-"			</form>\r\n"
-"			<form action=\"/\" method=POST>\r\n"
-"				<input type=submit value=\"Clear display\">\r\n"
-"			</form>\r\n"
-"		</div>\r\n"
-"	</td>\r\n"
+" <td>\r\n"
+"   <div id=\"formulaire\"> \r\n"
+"     <form action=\"/dump\" method=POST>\r\n"
+"       <input type=submit value=\"Dump\">\r\n"
+"     </form>\r\n"
+"     <form action=\"/\" method=POST>\r\n"
+"       <input type=submit value=\"Home\">\r\n"
+"     </form>\r\n"
+"     <form action=\"/\" method=POST>\r\n"
+"       <input type=submit value=\"Clear display\">\r\n"
+"     </form>\r\n"
+"   </div>\r\n"
+" </td>\r\n"
 "</foot>\r\n";
 
 
@@ -94,6 +95,8 @@ String raw_data = "";
 
 void setup(void)
 {
+  /* No password parameter for the AP to be open. */
+  WiFi.softAP(ssid);
   pinMode(LED_BUILTIN, OUTPUT);
   writeLED(true);
 
@@ -128,7 +131,7 @@ void handleRoot()
     handleSubmit();
   }
   else if ((server.hasArg("Dump"))) {
-	  handleDump();
+    handleDump();
   }
   else {
     server.send(200, "text/html", INDEX_HTML);
@@ -155,12 +158,12 @@ void handleSubmit()
     LEDvalue = server.arg("LED");
     if (LEDvalue == "1") {
       Serial.println(LEDvalue);
-	  writeLED(true);
+    writeLED(true);
       server.send(200, "text/html", INDEX_HTML);
     }
     else if (LEDvalue == "0") {
       writeLED(false);
-	  Serial.println(LEDvalue);
+    Serial.println(LEDvalue);
       server.send(200, "text/html", INDEX_HTML);
     }
     else {
@@ -169,30 +172,30 @@ void handleSubmit()
   }
   else if(server.hasArg("TRANSMIT"))
   {
-	page = PICKUP_POLARITY;
-	server.send(200, "text/html", page);
+  page = PICKUP_POLARITY;
+  server.send(200, "text/html", page);
   }
-	else if (server.hasArg(valueToPic))  
+  else if (server.hasArg(valueToPic))  
   {
-	  POS_ADR_VALvalue = server.arg(valueToPic);
-	  if (POS_ADR_VALvalue == "1") {
-		  Serial.println(POS_ADR_VALvalue);
-		  valueToSend = valueToPic + POS_ADR_VALvalue;
-		  Serial.println(valueToSend);
-		  sendPICcommand("00 111", "OK", TIMEOUT, 1);
-		  page = "<h1>Response from PIC after sending 00 111 </h1><h3>Raw Data:</h3> <h4>"+raw_data+"</h4>";
-		  server.send(200, "text/html", page);
-	  }
-	  else if (POS_ADR_VALvalue == "0") {
-		  Serial.println(POS_ADR_VALvalue);
-		  valueToSend = valueToPic + POS_ADR_VALvalue;
-		  Serial.println(valueToSend);
-		  sendPICcommand("00 110", "OK", TIMEOUT, 1);
-		  page = "<h1>Response from PIC after sending 00 110 </h1><h3>Raw Data:</h3> <h4>"+raw_data+"</h4>";
-		  server.send(200, "text/html", page);
-	  }
-	  page = PICKUP_POLARITY;
-	  server.send(200, "text/html", page);
+    POS_ADR_VALvalue = server.arg(valueToPic);
+    if (POS_ADR_VALvalue == "1") {
+      Serial.println(POS_ADR_VALvalue);
+      valueToSend = valueToPic + POS_ADR_VALvalue;
+      Serial.println(valueToSend);
+      sendPICcommand("01 111", "OK", TIMEOUT, 1);
+      page = "<h1>Response from PIC after sending 01 111 </h1><h3>Raw Data:</h3> <h4>"+raw_data+"</h4>";
+      server.send(200, "text/html", page);
+    }
+    else if (POS_ADR_VALvalue == "0") {
+      Serial.println(POS_ADR_VALvalue);
+      valueToSend = valueToPic + POS_ADR_VALvalue;
+      Serial.println(valueToSend);
+      sendPICcommand("01 110", "OK", TIMEOUT, 1);
+      page = "<h1>Response from PIC after sending 01 110 </h1><h3>Raw Data:</h3> <h4>"+raw_data+"</h4>";
+      server.send(200, "text/html", page);
+    }
+    page = PICKUP_POLARITY;
+    server.send(200, "text/html", page);
   }
 
 }
@@ -200,13 +203,13 @@ void handleSubmit()
 ///////////////////////////////////////////////////
 void handleDump()
 {
-	// show data saved in PIC
-	// E is the expected last char
-	// it reads every char before getting to
-	// E and displays it on console and browser too
-	sendPICcommand("99 000", "E", TIMEOUT, 1);
-	page = "<h1>Values saved on eeprom </h1><h3>Raw Data:</h3> <h4>"+raw_data+"</h4>";
-	server.send(200, "text/html", page);
+  // show data saved in PIC
+  // E is the expected last char
+  // it reads every char before getting to
+  // E and displays it on console and browser too
+  sendPICcommand("99 000", "E", TIMEOUT, 1);
+  page = "<h1>Values saved on eeprom </h1><h3>Raw Data:</h3> <h4>"+raw_data+"</h4>";
+  server.send(200, "text/html", page);
 }
 
 ///////////////////////////////////////////////////
@@ -307,12 +310,11 @@ int8_t sendPICcommand(char* PICcommand, char* expected_answer, unsigned int time
   if (show_response == 1) {
     Serial.println(response);
     Serial.println(answer);
-	raw_data = "";
-	raw_data = String(response);
-	Serial.println("Printing raw data: ");
-	Serial.println(raw_data);
+  raw_data = "";
+  raw_data = String(response);
+  Serial.println("Printing raw data: ");
+  Serial.println(raw_data);
   }
 
   return answer;
 }
-
