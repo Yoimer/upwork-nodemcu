@@ -179,11 +179,17 @@ void handleSubmit()
 		  Serial.println(POS_ADR_VALvalue);
 		  valueToSend = valueToPic + POS_ADR_VALvalue;
 		  Serial.println(valueToSend);
+		  sendPICcommand("00 111", "OK", TIMEOUT, 1);
+		  page = "<h1>Response from PIC after sending 00 111 </h1><h3>Raw Data:</h3> <h4>"+raw_data+"</h4>";
+		  server.send(200, "text/html", page);
 	  }
 	  else if (POS_ADR_VALvalue == "0") {
 		  Serial.println(POS_ADR_VALvalue);
 		  valueToSend = valueToPic + POS_ADR_VALvalue;
 		  Serial.println(valueToSend);
+		  sendPICcommand("00 110", "OK", TIMEOUT, 1);
+		  page = "<h1>Response from PIC after sending 00 110 </h1><h3>Raw Data:</h3> <h4>"+raw_data+"</h4>";
+		  server.send(200, "text/html", page);
 	  }
 	  page = PICKUP_POLARITY;
 	  server.send(200, "text/html", page);
