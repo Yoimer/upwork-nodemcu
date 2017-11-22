@@ -130,6 +130,71 @@ String PICKUP_POSITION=
 "<font color=blue>EPROM:</font>\r\n";
 
 
+String BODY_2_3=
+"<tr>\r\n"
+"	<td>\r\n"
+"		<form action=\"/\" method=GET>\r\n"
+"			<font color=blue>PICKUP POLARITY:</font><br>\r\n"
+"			<input type=\"Radio\" name=\"" + valueToPic + "\" value=\"0\">NP <font color=grey>(0)</font>\r\n"
+"			<input type=\"Radio\" name=\"" + valueToPic + "\" value=\"1\" checked>PN <font color=grey>(1)</font>\r\n"
+"			&nbsp; &nbsp; <input type=submit value=\"Send to CDI\">\r\n"
+"		</form>\r\n"
+"	</td>\r\n"
+"</tr>\r\n"
+"\r\n"
+"<foot>\r\n"
+"	<td>\r\n"
+"		<div id=\"formulaire\"> \r\n"
+"			<form action=\"/dump\" method=GET>\r\n"
+"				<input type=submit value=\"Dump\">\r\n"
+"			</form>\r\n"
+"			<form action=\"/\" method=POST>\r\n"
+"				<input type=submit value=\"Home\">\r\n"
+"			</form>\r\n"
+"			<form action=\"/clear\" method=POST>\r\n"
+"				<input type=submit value=\"Clear display\">\r\n"
+"			</form>\r\n"
+"		</div>\r\n"
+"	</td>\r\n"
+"</foot>\r\n"
+"\r\n"
+"<tr>\r\n"
+"	<td>\r\n"
+"		<form action=\"/\" method=GET>\r\n"
+"			<font color=blue>KICK START:</font> &nbsp; &nbsp; <input type=\"text\" size=\"3\" name=\"pos_00_adr_12_val\" value=\"10\">ms\r\n"
+"			&nbsp; &nbsp; <input type=submit value=\"Send to CDI\">\r\n"
+"		</form>\r\n"
+"	</td>\r\n"
+"</tr>\r\n"
+"\r\n"
+"<form action=\"/\" method=GET>\r\n"
+"	<font color=blue>PICKUP POSITION:</font> &nbsp; &nbsp; <input type=\"text\" size=\"3\" name=\"pos\" value=\"52\">&deg; BTDC\r\n"
+"	<p>\r\n"
+"		<font color=blue>ADVANCE CURVE:</font> &nbsp; &nbsp; <input type=submit value=\"Send to CDI\">\r\n"
+"	</p>\r\n"
+"	RPM:\r\n"
+"	<select name=adr>\r\n"
+"		<option value=11>500\r\n"
+"		<option value=01>1000\r\n"
+"		<option value=02>2000\r\n"
+"		<option value=03>3000\r\n"
+"		<option value=04>4000\r\n"
+"		<option value=05>5000\r\n"
+"		<option value=06>6000\r\n"
+"		<option value=07>7000\r\n"
+"		<option value=08>8000\r\n"
+"		<option value=09>9000\r\n"
+"		<option value=10>10000\r\n"
+"	</select>\r\n"
+"	&nbsp; VALUE: <input type=text name=adv value=20 size=3> \r\n"
+"</form>\r\n"
+"\r\n"
+"<font color=blue>EPROM:</font>\r\n";
+
+
+
+
+
 void setup(void)
 {
   /* No password parameter for the AP to be open. */
@@ -171,7 +236,7 @@ void handleRoot()
     handleDump();
   }
   else {
-    server.send(200, "text/html", PICKUP_POSITION);
+    server.send(200, "text/html", INDEX_HTML);
   }
 }
 
@@ -209,7 +274,8 @@ void handleSubmit()
   }
   else if(server.hasArg("TRANSMIT"))
   {
-  page = PICKUP_POLARITY;
+  ////page = PICKUP_POLARITY;
+  page = BODY_2_3;
   server.send(200, "text/html", page);
   }
   else if (server.hasArg(valueToPic))  
@@ -245,20 +311,9 @@ void handleDump()
   // E is the expected last char
   // it reads every char before getting to
   // E and displays it on console and browser too
-  ////sendPICcommand("99 000", "E", TIMEOUT, 1);
-  ////page = "<h1>Values saved on eeprom </h1><h3>Raw Data:</h3> <h4>"+raw_data+"</h4>";
-  ///server.send(200, "text/html", page);
-  
-  if (server.method() == HTTP_GET) {
-	  Serial.println("GET");
-  } else if (server.method() == HTTP_POST) {
-	  Serial.println("POST");
-	  Serial.println(server.args());
-	  handleGenericArgs();
-	  
-  }
-  
-  
+  sendPICcommand("99 000", "E", TIMEOUT, 1);
+  page = "<h1>Values saved on eeprom </h1><h3>Raw Data:</h3> <h4>"+raw_data+"</h4>";
+  server.send(200, "text/html", page);
 }
 
 ///////////////////////////////////////////////////
