@@ -93,6 +93,43 @@ String page = "";
 
 String raw_data = "";
 
+
+String PICKUP_POSITION=
+"\r\n"
+"<tr>\r\n"
+"	<td>\r\n"
+"		<form action=\"/\" method=GET>\r\n"
+"			<font color=blue>KICK START:</font> &nbsp; &nbsp; <input type=\"text\" size=\"3\" name=\"pos_00_adr_12_val\" value=\"10\">ms\r\n"
+"			&nbsp; &nbsp; <input type=submit value=\"Send to CDI\">\r\n"
+"		</form>\r\n"
+"	</td>\r\n"
+"</tr>\r\n"
+"\r\n"
+"<form action=\"/\" method=GET>\r\n"
+"	<font color=blue>PICKUP POSITION:</font> &nbsp; &nbsp; <input type=\"text\" size=\"3\" name=\"pos\" value=\"52\">&deg; BTDC\r\n"
+"	<p>\r\n"
+"		<font color=blue>ADVANCE CURVE:</font> &nbsp; &nbsp; <input type=submit value=\"Send to CDI\">\r\n"
+"	</p>\r\n"
+"	RPM:\r\n"
+"	<select name=adr>\r\n"
+"		<option value=11>500\r\n"
+"		<option value=01>1000\r\n"
+"		<option value=02>2000\r\n"
+"		<option value=03>3000\r\n"
+"		<option value=04>4000\r\n"
+"		<option value=05>5000\r\n"
+"		<option value=06>6000\r\n"
+"		<option value=07>7000\r\n"
+"		<option value=08>8000\r\n"
+"		<option value=09>9000\r\n"
+"		<option value=10>10000\r\n"
+"	</select>\r\n"
+"	&nbsp; VALUE: <input type=text name=adv value=20 size=3> \r\n"
+"</form>\r\n"
+"\r\n"
+"<font color=blue>EPROM:</font>\r\n";
+
+
 void setup(void)
 {
   /* No password parameter for the AP to be open. */
@@ -134,7 +171,7 @@ void handleRoot()
     handleDump();
   }
   else {
-    server.send(200, "text/html", INDEX_HTML);
+    server.send(200, "text/html", PICKUP_POSITION);
   }
 }
 
