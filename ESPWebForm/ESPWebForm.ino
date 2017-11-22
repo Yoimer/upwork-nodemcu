@@ -186,7 +186,7 @@ String BODY_2_3=
 "		<option value=09>9000\r\n"
 "		<option value=10>10000\r\n"
 "	</select>\r\n"
-"	&nbsp; VALUE: <input type=text name=adv value=20 size=3> \r\n"
+"	&nbsp; VALUE: <input type=text name=val value=20 size=3> \r\n"
 "</form>\r\n"
 "\r\n"
 "<font color=blue>EPROM:</font>\r\n";
@@ -234,6 +234,9 @@ void handleRoot()
   }
   else if ((server.hasArg("Dump"))) {
     handleDump();
+  }
+  else if ((server.hasArg("pos"))) {
+    handleCDI();
   }
   else {
     server.send(200, "text/html", INDEX_HTML);
@@ -374,6 +377,15 @@ void writeLED(bool LEDon)
   else
     digitalWrite(LED_BUILTIN, HIGH);
 }
+
+///////////////////////////////////////////////////
+void handleCDI()
+{
+  handleGenericArgs();
+}
+
+
+
 
 //////////////////////////////////////////////
 
