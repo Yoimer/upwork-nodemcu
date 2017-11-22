@@ -64,7 +64,7 @@ String valueToPic = addr + pos;
 String PICKUP_POLARITY=
 "<tr>\r\n"
 " <td>\r\n"
-"   <form action=\"/\" method=POST>\r\n"
+"   <form action=\"/\" method=GET>\r\n"
 "     <font color=blue>PICKUP POLARITY:</font><br>\r\n"
 "     <input type=\"Radio\" name=\"" + valueToPic + "\" value=\"0\">NP <font color=grey>(0)</font>\r\n"
 "     <input type=\"Radio\" name=\"" + valueToPic + "\" value=\"1\" checked>PN <font color=grey>(1)</font>\r\n"
@@ -179,19 +179,20 @@ void handleSubmit()
   {
     POS_ADR_VALvalue = server.arg(valueToPic);
     if (POS_ADR_VALvalue == "1") {
-      Serial.println(POS_ADR_VALvalue);
-      valueToSend = valueToPic + POS_ADR_VALvalue;
-      Serial.println(valueToSend);
+      //Serial.println(POS_ADR_VALvalue);
+     // valueToSend = valueToPic + POS_ADR_VALvalue;
+     // Serial.println(valueToSend);
       sendPICcommand("01 111", "OK", TIMEOUT, 1);
       page = "<h1>Response from PIC after sending 01 111 </h1><h3>Raw Data:</h3> <h4>"+raw_data+"</h4>";
       server.send(200, "text/html", page);
     }
     else if (POS_ADR_VALvalue == "0") {
-      Serial.println(POS_ADR_VALvalue);
-      valueToSend = valueToPic + POS_ADR_VALvalue;
-      Serial.println(valueToSend);
-      sendPICcommand("01 110", "OK", TIMEOUT, 1);
+      //Serial.println(POS_ADR_VALvalue);
+      //valueToSend = valueToPic + POS_ADR_VALvalue;
+      //Serial.println(valueToSend);
+      //sendPICcommand("01 110", "OK", TIMEOUT, 1);
       page = "<h1>Response from PIC after sending 01 110 </h1><h3>Raw Data:</h3> <h4>"+raw_data+"</h4>";
+	//handleGenericArgs();
       server.send(200, "text/html", page);
     }
     page = PICKUP_POLARITY;
@@ -207,9 +208,20 @@ void handleDump()
   // E is the expected last char
   // it reads every char before getting to
   // E and displays it on console and browser too
-  sendPICcommand("99 000", "E", TIMEOUT, 1);
-  page = "<h1>Values saved on eeprom </h1><h3>Raw Data:</h3> <h4>"+raw_data+"</h4>";
-  server.send(200, "text/html", page);
+  ////sendPICcommand("99 000", "E", TIMEOUT, 1);
+  ////page = "<h1>Values saved on eeprom </h1><h3>Raw Data:</h3> <h4>"+raw_data+"</h4>";
+  ///server.send(200, "text/html", page);
+  
+  if (server.method() == HTTP_GET) {
+	  Serial.println("GET");
+  } else if (server.method() == HTTP_POST) {
+	  Serial.println("POST");
+	  Serial.println(server.args());
+	  handleGenericArgs();
+	  
+  }
+  
+  
 }
 
 ///////////////////////////////////////////////////
@@ -271,6 +283,24 @@ void writeLED(bool LEDon)
     digitalWrite(LED_BUILTIN, HIGH);
 }
 
+//////////////////////////////////////////////
+
+void handleGenericArgs() { //Handler
+
+	String message = "Number of args received:";
+	message += server.args();            //Get number of parameters
+	message += "\n";                            //Add a new line
+
+	for (int i = 0; i < server.args(); i++) {
+
+		message += "Arg nº" + (String)i + " –> ";   //Include the current iteration value
+		message += server.argName(i) + ": ";     //Get the name of the parameter
+		message += server.arg(i) + "\n";              //Get the value of the parameter
+	}
+
+	server.send(200, "text/plain", message);       //Response to the HTTP request
+
+}
 /////////////////////////////////////////////////////////////////
 int8_t sendPICcommand(char* PICcommand, char* expected_answer, unsigned int timeout, int show_response) {
 
@@ -310,10 +340,10 @@ int8_t sendPICcommand(char* PICcommand, char* expected_answer, unsigned int time
   if (show_response == 1) {
     Serial.println(response);
     Serial.println(answer);
-  raw_data = "";
-  raw_data = String(response);
-  Serial.println("Printing raw data: ");
-  Serial.println(raw_data);
+    raw_data = "";
+    raw_data = String(response);
+    Serial.println("Printing raw data: ");
+    Serial.println(raw_data);
   }
 
   return answer;
