@@ -161,7 +161,7 @@ String BODY_2_3=
 "<tr>\r\n"
 "	<td>\r\n"
 "		<form action=\"/\" method=GET>\r\n"
-"			<font color=blue>KICK START:</font> &nbsp; &nbsp; <input type=\"text\" size=\"3\" name=\"pos_00_adr_12_val\" value=\"10\">ms\r\n"
+"			<font color=blue>KICK START:</font> &nbsp; &nbsp; <input type=\"text\" size=\"3\" name=\"adr_12\" value=\"10\">ms\r\n"
 "			&nbsp; &nbsp; <input type=submit value=\"Send to CDI\">\r\n"
 "		</form>\r\n"
 "	</td>\r\n"
@@ -235,7 +235,7 @@ void handleRoot()
   else if ((server.hasArg("Dump"))) {
     handleDump();
   }
-  else if ((server.hasArg("pos"))) {
+  else if (server.hasArg("pos") || server.hasArg("adr_12")) {
     handleCDI();
   }
   else {
@@ -400,19 +400,34 @@ void handleGenericArgs() { //Handler
 
 	for (int i = 0; i < server.args(); i++) {
 
-		message += "Arg nº" + (String)i + " => ";   //Include the current iteration value
+		message += "Arg No" + (String)i + " => ";   //Include the current iteration value
 		message += server.argName(i) + ": ";     //Get the name of the parameter
 		message += server.arg(i) + "\n";              //Get the value of the parameter
 		toPIC += server.arg(i) + " ";
 	}
 
-	toPIC.toCharArray(PICcommand, 20);
-	// Uncoment just for debugging
-	////Serial.println("PICcommand");
-	////Serial.println(PICcommand);
-	sendPICcommand(PICcommand, "E", TIMEOUT, 1);
-    page = "<h1>Writing values to eeprom... </h1><h3>Raw Data:</h3> <h4>"+raw_data+"</h4>";
-    server.send(200, "text/html", page);
+	if (server.hasArg("adr_12")) {
+		// forces 12 value
+		toPIC = "12 " + toPIC;
+		// converts String object into char array
+		toPIC.toCharArray(PICcommand, 20);
+		// Uncoment just for debugging
+		////Serial.println("PICcommand");
+		////Serial.println(PICcommand);
+		sendPICcommand(PICcommand, "E", TIMEOUT, 1);
+		page = "<h1>Writing values to eeprom... </h1><h3>Raw Data:</h3> <h4>"+raw_data+"</h4>";
+		server.send(200, "text/html", page);
+	}
+	else {
+		// converts String object into char array
+		toPIC.toCharArray(PICcommand, 20);
+		// Uncoment just for debugging
+		////Serial.println("PICcommand");
+		////Serial.println(PICcommand);
+		sendPICcommand(PICcommand, "E", TIMEOUT, 1);
+		page = "<h1>Writing values to eeprom... </h1><h3>Raw Data:</h3> <h4>"+raw_data+"</h4>";
+		server.send(200, "text/html", page);
+	}
 
 }
 /////////////////////////////////////////////////////////////////
