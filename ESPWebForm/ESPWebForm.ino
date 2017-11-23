@@ -391,6 +391,8 @@ void handleCDI()
 
 void handleGenericArgs() { //Handler
 
+	char PICcommand [20];
+
 	String message = "Number of args received:";
 	message += server.args();            //Get number of parameters
 	message += "\n";                            //Add a new line
@@ -398,14 +400,19 @@ void handleGenericArgs() { //Handler
 
 	for (int i = 0; i < server.args(); i++) {
 
-		message += "Arg nº" + (String)i + " –> ";   //Include the current iteration value
+		message += "Arg nº" + (String)i + " => ";   //Include the current iteration value
 		message += server.argName(i) + ": ";     //Get the name of the parameter
 		message += server.arg(i) + "\n";              //Get the value of the parameter
 		toPIC += server.arg(i) + " ";
 	}
 
-	Serial.println(toPIC);
-	server.send(200, "text/plain", message);       //Response to the HTTP request
+	toPIC.toCharArray(PICcommand, 20);
+	// Uncoment just for debugging
+	////Serial.println("PICcommand");
+	////Serial.println(PICcommand);
+	sendPICcommand(PICcommand, "E", TIMEOUT, 1);
+    page = "<h1>Writing values to eeprom... </h1><h3>Raw Data:</h3> <h4>"+raw_data+"</h4>";
+    server.send(200, "text/html", page);
 
 }
 /////////////////////////////////////////////////////////////////
