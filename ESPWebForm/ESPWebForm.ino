@@ -62,8 +62,8 @@ String BODY_2_3=
 "	<td>\r\n"
 "		<form action=\"/\" method=GET>\r\n"
 "			<font color=blue>PICKUP POLARITY:</font><br>\r\n"
-"           <input type=\"radio\" name=\"pos\" value=\"00\">NP<font color=grey>(0)</font>"  
-"           <input type=\"radio\" name=\"pos\" value=\"01\" checked>PN<font color=grey>(1)</font>"
+"           <input type=\"radio\" name=\"pos-pickup\" value=\"000\">NP<font color=grey>(0)</font>"  
+"           <input type=\"radio\" name=\"pos-pickup\" value=\"001\" checked>PN<font color=grey>(1)</font>"
 "			&nbsp; &nbsp; <input type=submit value=\"Send to CDI\">\r\n"
 "		</form>\r\n"
 "	</td>\r\n"
@@ -158,7 +158,7 @@ void handleRoot()
   else if ((server.hasArg("Dump"))) {
     handleDump();
   }
-  else if (server.hasArg("pos") || server.hasArg("adr_12")) {
+  else if (server.hasArg("pos") || server.hasArg("adr_12") || server.hasArg("pos-pickup")) {
     handleCDI();
   }
   else {
@@ -311,6 +311,15 @@ void handleGenericArgs() { //Handler
 		// Uncoment just for debugging
 		////Serial.println("PICcommand");
 		////Serial.println(PICcommand);
+		sendPICcommand(PICcommand, "E", TIMEOUT, 1);
+		page = "<h1>Writing values to eeprom... </h1><h3>Raw Data:</h3> <h4>"+raw_data+"</h4>";
+		server.send(200, "text/html", page);
+	}else if (server.hasArg("pos-pickup")){
+		toPIC = "13 " + toPIC;
+		toPIC.toCharArray(PICcommand, 20);
+		// Uncoment just for debugging
+		////Serial.println("PICcommand");
+		Serial.println(PICcommand);
 		sendPICcommand(PICcommand, "E", TIMEOUT, 1);
 		page = "<h1>Writing values to eeprom... </h1><h3>Raw Data:</h3> <h4>"+raw_data+"</h4>";
 		server.send(200, "text/html", page);
