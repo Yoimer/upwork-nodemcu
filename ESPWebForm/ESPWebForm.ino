@@ -53,82 +53,9 @@ const char INDEX_HTML[] =
   "</body>"
 "</html>";
 
-
-
-String pos = "00-";
-
-String addr = "13-";
-
-//String polarity = addr + pos; name=\"pos\"
-
-/*String PICKUP_POLARITY=
-"<tr>\r\n"
-" <td>\r\n"
-"   <form action=\"/\" method=GET>\r\n"
-"     <font color=blue>PICKUP POLARITY:</font><br>\r\n"
-"     <input type=\"radio\" name=\"pos_00_adr_13_val\" value=\"00\">NP<font color=grey>(0)</font>"
-"     <input type=\"radio\" name=\"pos_00_adr_13_val\" value=\"01\" checked>PN<font color=grey>(1)</font>"
-"     &nbsp; &nbsp; <input type=submit value=\"Send to CDI\">\r\n"
-"   </form>\r\n"
-" </td>\r\n"
-"</tr>\r\n"
-"<foot>\r\n"
-" <td>\r\n"
-"   <div id=\"formulaire\"> \r\n"
-"     <form action=\"/dump\" method=POST>\r\n"
-"       <input type=submit value=\"Dump\">\r\n"
-"     </form>\r\n"
-"     <form action=\"/\" method=POST>\r\n"
-"       <input type=submit value=\"Home\">\r\n"
-"     </form>\r\n"
-"     <form action=\"/\" method=POST>\r\n"
-"       <input type=submit value=\"Clear display\">\r\n"
-"     </form>\r\n"
-"   </div>\r\n"
-" </td>\r\n"
-"</foot>\r\n";*/
-
-
 String page = "";
 
 String raw_data = "";
-
-
-String PICKUP_POSITION=
-"\r\n"
-"<tr>\r\n"
-"	<td>\r\n"
-"		<form action=\"/\" method=GET>\r\n"
-"			<font color=blue>KICK START:</font> &nbsp; &nbsp; <input type=\"text\" size=\"3\" name=\"pos_00_adr_12_val\" value=\"10\">ms\r\n"
-"			&nbsp; &nbsp; <input type=submit value=\"Send to CDI\">\r\n"
-"		</form>\r\n"
-"	</td>\r\n"
-"</tr>\r\n"
-"\r\n"
-"<form action=\"/\" method=GET>\r\n"
-"	<font color=blue>PICKUP POSITION:</font> &nbsp; &nbsp; <input type=\"text\" size=\"3\" name=\"pos\" value=\"52\">&deg; BTDC\r\n"
-"	<p>\r\n"
-"		<font color=blue>ADVANCE CURVE:</font> &nbsp; &nbsp; <input type=submit value=\"Send to CDI\">\r\n"
-"	</p>\r\n"
-"	RPM:\r\n"
-"	<select name=adr>\r\n"
-"		<option value=11>500\r\n"
-"		<option value=01>1000\r\n"
-"		<option value=02>2000\r\n"
-"		<option value=03>3000\r\n"
-"		<option value=04>4000\r\n"
-"		<option value=05>5000\r\n"
-"		<option value=06>6000\r\n"
-"		<option value=07>7000\r\n"
-"		<option value=08>8000\r\n"
-"		<option value=09>9000\r\n"
-"		<option value=10>10000\r\n"
-"	</select>\r\n"
-"	&nbsp; VALUE: <input type=text name=adv value=20 size=3> \r\n"
-"</form>\r\n"
-"\r\n"
-"<font color=blue>EPROM:</font>\r\n";
-
 
 String BODY_2_3=
 "<tr>\r\n"
@@ -190,10 +117,6 @@ String BODY_2_3=
 "</form>\r\n"
 "\r\n"
 "<font color=blue>EPROM:</font>\r\n";
-
-
-
-
 
 void setup(void)
 {
@@ -281,29 +204,6 @@ void handleSubmit()
   page = BODY_2_3;
   server.send(200, "text/html", page);
   }
-  /*else if (server.hasArg(polarity))  
-  {
-    POS_ADR_VALvalue = server.arg(polarity);
-    if (POS_ADR_VALvalue == "1") {
-      //Serial.println(POS_ADR_VALvalue);
-     // valueToSend = polarity + POS_ADR_VALvalue;
-     // Serial.println(valueToSend);
-      sendPICcommand("01 111", "OK", TIMEOUT, 1);
-      page = "<h1>Response from PIC after sending 01 111 </h1><h3>Raw Data:</h3> <h4>"+raw_data+"</h4>";
-      server.send(200, "text/html", page);
-    }
-    else if (POS_ADR_VALvalue == "0") {
-      //Serial.println(POS_ADR_VALvalue);
-      //valueToSend = polarity + POS_ADR_VALvalue;
-      //Serial.println(valueToSend);
-      //sendPICcommand("01 110", "OK", TIMEOUT, 1);
-      page = "<h1>Response from PIC after sending 01 110 </h1><h3>Raw Data:</h3> <h4>"+raw_data+"</h4>";
-	//handleGenericArgs();
-      server.send(200, "text/html", page);
-    }
-    page = PICKUP_POLARITY;
-    server.send(200, "text/html", page);
-  }*/
 
 }
 
@@ -383,9 +283,6 @@ void handleCDI()
 {
   handleGenericArgs();
 }
-
-
-
 
 //////////////////////////////////////////////
 
