@@ -59,15 +59,15 @@ String pos = "00-";
 
 String addr = "13-";
 
-String valueToPic = addr + pos;
+//String polarity = addr + pos; name=\"pos\"
 
-String PICKUP_POLARITY=
+/*String PICKUP_POLARITY=
 "<tr>\r\n"
 " <td>\r\n"
 "   <form action=\"/\" method=GET>\r\n"
 "     <font color=blue>PICKUP POLARITY:</font><br>\r\n"
-"     <input type=\"Radio\" name=\"" + valueToPic + "\" value=\"0\">NP <font color=grey>(0)</font>\r\n"
-"     <input type=\"Radio\" name=\"" + valueToPic + "\" value=\"1\" checked>PN <font color=grey>(1)</font>\r\n"
+"     <input type=\"radio\" name=\"pos_00_adr_13_val\" value=\"00\">NP<font color=grey>(0)</font>"
+"     <input type=\"radio\" name=\"pos_00_adr_13_val\" value=\"01\" checked>PN<font color=grey>(1)</font>"
 "     &nbsp; &nbsp; <input type=submit value=\"Send to CDI\">\r\n"
 "   </form>\r\n"
 " </td>\r\n"
@@ -86,7 +86,7 @@ String PICKUP_POLARITY=
 "     </form>\r\n"
 "   </div>\r\n"
 " </td>\r\n"
-"</foot>\r\n";
+"</foot>\r\n";*/
 
 
 String page = "";
@@ -135,8 +135,8 @@ String BODY_2_3=
 "	<td>\r\n"
 "		<form action=\"/\" method=GET>\r\n"
 "			<font color=blue>PICKUP POLARITY:</font><br>\r\n"
-"			<input type=\"Radio\" name=\"" + valueToPic + "\" value=\"0\">NP <font color=grey>(0)</font>\r\n"
-"			<input type=\"Radio\" name=\"" + valueToPic + "\" value=\"1\" checked>PN <font color=grey>(1)</font>\r\n"
+"           <input type=\"radio\" name=\"pos\" value=\"00\">NP<font color=grey>(0)</font>"  
+"           <input type=\"radio\" name=\"pos\" value=\"01\" checked>PN<font color=grey>(1)</font>"
 "			&nbsp; &nbsp; <input type=submit value=\"Send to CDI\">\r\n"
 "		</form>\r\n"
 "	</td>\r\n"
@@ -229,7 +229,7 @@ void loop(void)
 /////////////////////////////////////////////////////
 void handleRoot()
 {
-  if (server.hasArg("LED") || server.hasArg("TRANSMIT") || server.hasArg(valueToPic)) {
+  if (server.hasArg("LED") || server.hasArg("TRANSMIT")) {
     handleSubmit();
   }
   else if ((server.hasArg("Dump"))) {
@@ -281,12 +281,12 @@ void handleSubmit()
   page = BODY_2_3;
   server.send(200, "text/html", page);
   }
-  else if (server.hasArg(valueToPic))  
+  /*else if (server.hasArg(polarity))  
   {
-    POS_ADR_VALvalue = server.arg(valueToPic);
+    POS_ADR_VALvalue = server.arg(polarity);
     if (POS_ADR_VALvalue == "1") {
       //Serial.println(POS_ADR_VALvalue);
-     // valueToSend = valueToPic + POS_ADR_VALvalue;
+     // valueToSend = polarity + POS_ADR_VALvalue;
      // Serial.println(valueToSend);
       sendPICcommand("01 111", "OK", TIMEOUT, 1);
       page = "<h1>Response from PIC after sending 01 111 </h1><h3>Raw Data:</h3> <h4>"+raw_data+"</h4>";
@@ -294,7 +294,7 @@ void handleSubmit()
     }
     else if (POS_ADR_VALvalue == "0") {
       //Serial.println(POS_ADR_VALvalue);
-      //valueToSend = valueToPic + POS_ADR_VALvalue;
+      //valueToSend = polarity + POS_ADR_VALvalue;
       //Serial.println(valueToSend);
       //sendPICcommand("01 110", "OK", TIMEOUT, 1);
       page = "<h1>Response from PIC after sending 01 110 </h1><h3>Raw Data:</h3> <h4>"+raw_data+"</h4>";
@@ -303,7 +303,7 @@ void handleSubmit()
     }
     page = PICKUP_POLARITY;
     server.send(200, "text/html", page);
-  }
+  }*/
 
 }
 
