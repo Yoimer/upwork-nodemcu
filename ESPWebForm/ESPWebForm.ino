@@ -288,7 +288,7 @@ void handleCDI()
 
 void handleGenericArgs() { //Handler
 
-	char PICcommand [20];
+	//char PICcommand [20];
 
 	String message = "Number of args received:";
 	message += server.args();            //Get number of parameters
@@ -306,36 +306,34 @@ void handleGenericArgs() { //Handler
 	if (server.hasArg("adr_12")) {
 		// forces 12 value
 		toPIC = "12 " + toPIC;
-		// converts String object into char array
-		toPIC.toCharArray(PICcommand, 20);
-		// Uncoment just for debugging
-		////Serial.println("PICcommand");
-		////Serial.println(PICcommand);
-		sendPICcommand(PICcommand, "E", TIMEOUT, 1);
-		page = "<h1>Writing values to eeprom... </h1><h3>Raw Data:</h3> <h4>"+raw_data+"</h4>";
-		server.send(200, "text/html", page);
+		writeToPIC(toPIC);
 	}else if (server.hasArg("pos-pickup")){
+		// forces 13 value
 		toPIC = "13 " + toPIC;
-		toPIC.toCharArray(PICcommand, 20);
-		// Uncoment just for debugging
-		////Serial.println("PICcommand");
-		Serial.println(PICcommand);
-		sendPICcommand(PICcommand, "E", TIMEOUT, 1);
-		page = "<h1>Writing values to eeprom... </h1><h3>Raw Data:</h3> <h4>"+raw_data+"</h4>";
-		server.send(200, "text/html", page);
+		writeToPIC(toPIC);
 	}
 	else {
-		// converts String object into char array
-		toPIC.toCharArray(PICcommand, 20);
-		// Uncoment just for debugging
-		////Serial.println("PICcommand");
-		////Serial.println(PICcommand);
-		sendPICcommand(PICcommand, "E", TIMEOUT, 1);
-		page = "<h1>Writing values to eeprom... </h1><h3>Raw Data:</h3> <h4>"+raw_data+"</h4>";
-		server.send(200, "text/html", page);
+		writeToPIC(toPIC);
 	}
 
 }
+
+
+//////////////////////////////////////////////
+
+void writeToPIC (String toPIC) {
+
+	char PICcommand [20];
+	// converts String object into char array
+	toPIC.toCharArray(PICcommand, 20);
+	// Uncoment just for debugging
+	////Serial.println("PICcommand");
+	////Serial.println(PICcommand);
+	sendPICcommand(PICcommand, "E", TIMEOUT, 1);
+	page = "<h1>Writing values to eeprom... </h1><h3>Raw Data:</h3> <h4>"+raw_data+"</h4>";
+	server.send(200, "text/html", page);
+}
+
 /////////////////////////////////////////////////////////////////
 int8_t sendPICcommand(char* PICcommand, char* expected_answer, unsigned int timeout, int show_response) {
 
