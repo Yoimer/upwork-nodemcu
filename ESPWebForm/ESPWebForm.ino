@@ -100,7 +100,7 @@ String BODY_2_3=
 "		<font color=blue>ADVANCE CURVE:</font> &nbsp; &nbsp; <input type=submit value=\"Send to CDI\">\r\n"
 "	</p>\r\n"
 "	RPM:\r\n"
-"	<select name=adr>\r\n"
+"	<select name=\"adr\">\r\n"
 "		<option value=11>500\r\n"
 "		<option value=01>1000\r\n"
 "		<option value=02>2000\r\n"
@@ -158,7 +158,7 @@ void handleRoot()
   else if ((server.hasArg("Dump"))) {
     handleDump();
   }
-  else if (server.hasArg("pos") || server.hasArg("adr_12") || server.hasArg("pos-pickup")) {
+  else if (server.hasArg("adr") || server.hasArg("adr_12") || server.hasArg("pos-pickup")) {
     handleCDI();
   }
   else {
@@ -302,6 +302,8 @@ void handleGenericArgs() { //Handler
 		message += server.arg(i) + "\n";              //Get the value of the parameter
 		toPIC += server.arg(i) + " ";
 	}
+	
+	////server.send(200, "text/plain", message);       //Response to the HTTP request
 
 	if (server.hasArg("adr_12")) {
 		// forces 12 value
@@ -312,8 +314,15 @@ void handleGenericArgs() { //Handler
 		toPIC = "13 " + toPIC;
 		writeToPIC(toPIC);
 	}
-	else {
-		writeToPIC(toPIC);
+	else if (server.hasArg("adr")){
+		String print = "";
+		//// WORKS OK print = toPIC.substring((toPIC.indexOf(32) + 1), 5);
+		print = toPIC.substring((toPIC.indexOf(32) + 1), toPIC.indexOf(32, toPIC.indexOf(32) + 1));
+		//phonenum = lastLine.substring((lastLine.indexOf(34) + 1),lastLine.indexOf(34, lastLine.indexOf(34) + 1));
+		raw_data = print;
+		page = "<h1>Writing values to eeprom... </h1><h3>Raw Data:</h3> <h4>"+raw_data+"</h4>";
+	    server.send(200, "text/html", page);
+		//writeToPIC(toPIC);
 	}
 
 }
@@ -329,7 +338,7 @@ void writeToPIC (String toPIC) {
 	// Uncoment just for debugging
 	////Serial.println("PICcommand");
 	////Serial.println(PICcommand);
-	sendPICcommand(PICcommand, "E", TIMEOUT, 1);
+	sendPICcommand(PICcommand, "OK", TIMEOUT, 1);
 	page = "<h1>Writing values to eeprom... </h1><h3>Raw Data:</h3> <h4>"+raw_data+"</h4>";
 	server.send(200, "text/html", page);
 }
