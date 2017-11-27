@@ -19,6 +19,15 @@
 // define timeout for expected answer from PIC
 #define TIMEOUT 2000
 
+// define cylinder 1
+#define cylinder 1
+
+// define stroke 
+#define stroke 2
+
+// define incompressible
+#define incompressible 20
+
 const char *ssid = "transmic_cdi";
 // Start DNS svr
 const byte DNS_PORT = 53;
@@ -27,7 +36,6 @@ DNSServer dnsServer;
 
 // Start Web svr
 ESP8266WebServer server(80);
-
 
 const char INDEX_HTML[] =
 "<!DOCTYPE HTML>"
