@@ -19,16 +19,18 @@
 // define timeout for expected answer from PIC
 #define TIMEOUT 2000
 
-// define cylinder 1
-#define cylinder 1
+// define cylinder 
+const String cylinder  = "1";
 
 // define stroke 
-#define stroke 2
+const String stroke = "2";
 
 // define incompressible
-#define incompressible 20
+const String incompressible = "20";
 
+// define SSID
 const char *ssid = "transmic_cdi";
+
 // Start DNS svr
 const byte DNS_PORT = 53;
 IPAddress apIP(192,168,4,1);
@@ -64,6 +66,18 @@ const char INDEX_HTML[] =
 String page = "";
 
 String raw_data = "";
+
+String pos = "";
+
+String adr = "";
+
+String val = "";
+
+String rpm = "";
+
+String computedelay = "";
+
+String steps = "";
 
 String BODY_2_3=
 "<tr>\r\n"
@@ -325,37 +339,83 @@ void handleGenericArgs() { //Handler
 	else if (server.hasArg("adr")){
 
 		// extracts pos
-		String pos = toPIC.substring(0, toPIC.indexOf(32));
+		pos = "";
+		pos = toPIC.substring(0, toPIC.indexOf(32));
 
 		// extracts adr
-		String adr = toPIC.substring((toPIC.indexOf(32) + 1), toPIC.indexOf(32, toPIC.indexOf(32) + 1));
+		adr = "";
+		adr = toPIC.substring((toPIC.indexOf(32) + 1), toPIC.indexOf(32, toPIC.indexOf(32) + 1));
 
 		// extracts val
-		String val = toPIC.substring(toPIC.indexOf(32, toPIC.indexOf(32) + 1), toPIC.indexOf(-1));
+		val = "";
+		val = toPIC.substring(toPIC.indexOf(32, toPIC.indexOf(32) + 1), toPIC.indexOf(-1));
 		
-		if (val == "01") {
+		if (adr == "01") {
 			//do something
-		}else if (val == "02") {
+			rpm = "1000";
+			computedelay = "87";
+			steps = "100";
+			raw_data = steps;
+		}else if (adr == "02") {
 			// do something
-		}else if (val == "03") {
+			rpm = "2000";
+			computedelay = "81";
+			steps = "20";
+			raw_data = steps;
+		}else if (adr == "03") {
 			// do something
-		}else if (val == "04") {
+			rpm = "3000";
+			computedelay = "81";
+			steps = "20";
+			raw_data = steps;
+		}else if (adr == "04") {
 			// do something
-		}else if (val == "05") {
+			rpm = "4000";
+			computedelay = "69";
+			steps = "20";
+			raw_data = steps;
+		}else if (adr == "05") {
 			// do something
-		}else if (val == "06") {
+			rpm = "5000";
+			computedelay = "63";
+			steps = "20";
+			raw_data = steps;
+		}else if (adr == "06") {
 			//do something
-		}else if (val == "07") {
+			rpm = "6000";
+			computedelay = "57";
+			steps = "14";
+			raw_data = steps;
+		}else if (adr == "07") {
 			//do something
-		}else if (val == "08") {
+			rpm = "7000";
+			computedelay = "51";
+			steps = "14";
+			raw_data = steps;
+		}else if (adr == "08") {
 			//do something
-		}else if (val == "09") {
+			rpm = "8000";
+			computedelay = "45";
+			steps = "14";
+			raw_data = steps;
+		}else if (adr == "09") {
 			//do something
-		}else if (val == "10") {
+			rpm = "9000";
+			computedelay = "39";
+			steps = "14";
+			raw_data = steps;
+		}else if (adr == "10") {
 			//do something
-		}else if (val == "11") {
+			rpm = "10000";
+			computedelay = "33";
+			steps = "14";
+			raw_data = steps;
+		}else if (adr == "11") {
 			//do something
-		}else if ((val == "12") || (val == "13")) {
+			//rpm = "";
+			//computedelay = "";
+			//steps = "";
+		}else if ((adr == "12") || (adr == "13")) {
 			//do something
 		}
 
@@ -365,7 +425,6 @@ void handleGenericArgs() { //Handler
 	}
 
 }
-
 
 //////////////////////////////////////////////
 
@@ -381,6 +440,28 @@ void writeToPIC (String toPIC) {
 	page = "<h1>Writing values to eeprom... </h1><h3>Raw Data:</h3> <h4>"+raw_data+"</h4>";
 	server.send(200, "text/html", page);
 }
+
+//////////////////////////////////////////////
+
+
+
+
+
+
+/*
+			function transform(pickpos,adresse,value,rpm,computedelay,steps)
+			--print( "stroke:" .. stroke .." cyl:"..cylinder.." incompressible:"..incompressible)
+			--print( "pickpos:"..pickpos.." adr:"..adresse.." value:"..value.." rpm:"..rpm .." computedelay:"..computedelay.." steps:"..steps)
+			dur1deg = (((1000*1000*60*stroke)/(2*cylinder*rpm))/360)
+			delay = (dur1deg * (pos - val) - incompressible - computedelay)
+			eprom = math.floor(delay / steps)
+			if eprom < 0 then eprom = 0 end
+			print(adr .. " "..string.format("%03d",eprom))
+			end
+*/
+
+
+
 
 /////////////////////////////////////////////////////////////////
 int8_t sendPICcommand(char* PICcommand, char* expected_answer, unsigned int timeout, int show_response) {
