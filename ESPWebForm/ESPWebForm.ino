@@ -315,15 +315,41 @@ void handleGenericArgs() { //Handler
 		writeToPIC(toPIC);
 	}
 	else if (server.hasArg("adr")){
-		
+
 		// extracts pos
 		String pos = toPIC.substring(0, toPIC.indexOf(32));
 
 		// extracts adr
 		String adr = toPIC.substring((toPIC.indexOf(32) + 1), toPIC.indexOf(32, toPIC.indexOf(32) + 1));
-		
+
 		// extracts val
 		String val = toPIC.substring(toPIC.indexOf(32, toPIC.indexOf(32) + 1), toPIC.indexOf(-1));
+		
+		if (val == "01") {
+			//do something
+		}else if (val == "02") {
+			// do something
+		}else if (val == "03") {
+			// do something
+		}else if (val == "04") {
+			// do something
+		}else if (val == "05") {
+			// do something
+		}else if (val == "06") {
+			//do something
+		}else if (val == "07") {
+			//do something
+		}else if (val == "08") {
+			//do something
+		}else if (val == "09") {
+			//do something
+		}else if (val == "10") {
+			//do something
+		}else if (val == "11") {
+			//do something
+		}else if ((val == "12") || (val == "13")) {
+			//do something
+		}
 
 		page = "<h1>Writing values to eeprom... </h1><h3>Raw Data:</h3> <h4>"+raw_data+"</h4>";
 	    server.send(200, "text/html", page);
