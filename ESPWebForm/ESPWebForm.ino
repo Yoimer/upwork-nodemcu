@@ -73,12 +73,6 @@ String adr = "";
 
 String val = "";
 
-String rpm = "";
-
-String computedelay = "";
-
-String steps = "";
-
 String BODY_2_3=
 "<tr>\r\n"
 "	<td>\r\n"
@@ -376,7 +370,7 @@ void handleGenericArgs() { //Handler
 			//do something
 		}
 		
-		//page = adr or pos or val for debugging
+		//raw_data = adr or pos or val for debugging
 		page = "<h1>Writing values to eeprom... </h1><h3>Raw Data:</h3> <h4>"+raw_data+"</h4>";
 	    server.send(200, "text/html", page);
 		//writeToPIC(toPIC);
@@ -414,22 +408,6 @@ float transform (String pos, String adr, String val, String rpm, String computed
 	float dur1deg = (((1000 * 1000 * 60 * stroke) / (2 * cylinder * rpmToInt)) / 360);
 	float processdelay = (dur1deg * (posToInt - valToInt) - incompressible - computedelayToInt);
 }
-
-
-/*
-			function transform(pickpos,adresse,value,rpm,computedelay,steps)
-			--print( "stroke:" .. stroke .." cyl:"..cylinder.." incompressible:"..incompressible)
-			--print( "pickpos:"..pickpos.." adr:"..adresse.." value:"..value.." rpm:"..rpm .." computedelay:"..computedelay.." steps:"..steps)
-			dur1deg = (((1000*1000*60*stroke)/(2*cylinder*rpm))/360)
-			delay = (dur1deg * (pos - val) - incompressible - computedelay)
-			eprom = math.floor(delay / steps)
-			if eprom < 0 then eprom = 0 end
-			print(adr .. " "..string.format("%03d",eprom))
-			end
-*/
-
-
-
 
 /////////////////////////////////////////////////////////////////
 int8_t sendPICcommand(char* PICcommand, char* expected_answer, unsigned int timeout, int show_response) {
