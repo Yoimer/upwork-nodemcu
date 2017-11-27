@@ -351,74 +351,32 @@ void handleGenericArgs() { //Handler
 		val = toPIC.substring(toPIC.indexOf(32, toPIC.indexOf(32) + 1), toPIC.indexOf(-1));
 		
 		if (adr == "01") {
-			//do something
-			rpm = "1000";
-			computedelay = "87";
-			steps = "100";
-			raw_data = steps;
+			transform(pos, adr, val, "1000", "87", "100");
 		}else if (adr == "02") {
-			// do something
-			rpm = "2000";
-			computedelay = "81";
-			steps = "20";
-			raw_data = steps;
+			transform(pos, adr, val, "2000", "81", "20");
 		}else if (adr == "03") {
-			// do something
-			rpm = "3000";
-			computedelay = "81";
-			steps = "20";
-			raw_data = steps;
+			transform(pos, adr, val, "3000", "81", "20");
 		}else if (adr == "04") {
-			// do something
-			rpm = "4000";
-			computedelay = "69";
-			steps = "20";
-			raw_data = steps;
+			transform(pos, adr, val, "4000", "69", "20");
 		}else if (adr == "05") {
-			// do something
-			rpm = "5000";
-			computedelay = "63";
-			steps = "20";
-			raw_data = steps;
+			transform(pos, adr, val, "5000", "63", "20");
 		}else if (adr == "06") {
-			//do something
-			rpm = "6000";
-			computedelay = "57";
-			steps = "14";
-			raw_data = steps;
+			transform(pos, adr, val, "6000", "57", "14");
 		}else if (adr == "07") {
-			//do something
-			rpm = "7000";
-			computedelay = "51";
-			steps = "14";
-			raw_data = steps;
+			transform(pos, adr, val, "7000", "51", "14");
 		}else if (adr == "08") {
-			//do something
-			rpm = "8000";
-			computedelay = "45";
-			steps = "14";
-			raw_data = steps;
+			transform(pos, adr, val, "8000", "45", "14");
 		}else if (adr == "09") {
-			//do something
-			rpm = "9000";
-			computedelay = "39";
-			steps = "14";
-			raw_data = steps;
+			transform(pos, adr, val, "9000", "39", "14");
 		}else if (adr == "10") {
-			//do something
-			rpm = "10000";
-			computedelay = "33";
-			steps = "14";
-			raw_data = steps;
+			transform(pos, adr, val, "10000", "33", "14");
 		}else if (adr == "11") {
-			//do something
-			//rpm = "";
-			//computedelay = "";
-			//steps = "";
+			transform(pos, adr, val, "500", "99", "100");
 		}else if ((adr == "12") || (adr == "13")) {
 			//do something
 		}
-
+		
+		//page = adr or pos or val for debugging
 		page = "<h1>Writing values to eeprom... </h1><h3>Raw Data:</h3> <h4>"+raw_data+"</h4>";
 	    server.send(200, "text/html", page);
 		//writeToPIC(toPIC);
