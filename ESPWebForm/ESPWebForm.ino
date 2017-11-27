@@ -315,11 +315,16 @@ void handleGenericArgs() { //Handler
 		writeToPIC(toPIC);
 	}
 	else if (server.hasArg("adr")){
-		String print = "";
-		//// WORKS OK print = toPIC.substring((toPIC.indexOf(32) + 1), 5);
-		print = toPIC.substring((toPIC.indexOf(32) + 1), toPIC.indexOf(32, toPIC.indexOf(32) + 1));
-		//phonenum = lastLine.substring((lastLine.indexOf(34) + 1),lastLine.indexOf(34, lastLine.indexOf(34) + 1));
-		raw_data = print;
+		
+		// extracts pos
+		String pos = toPIC.substring(0, toPIC.indexOf(32));
+
+		// extracts adr
+		String adr = toPIC.substring((toPIC.indexOf(32) + 1), toPIC.indexOf(32, toPIC.indexOf(32) + 1));
+		
+		// extracts val
+		String val = toPIC.substring(toPIC.indexOf(32, toPIC.indexOf(32) + 1), toPIC.indexOf(-1));
+
 		page = "<h1>Writing values to eeprom... </h1><h3>Raw Data:</h3> <h4>"+raw_data+"</h4>";
 	    server.send(200, "text/html", page);
 		//writeToPIC(toPIC);
