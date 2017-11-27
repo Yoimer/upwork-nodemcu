@@ -20,13 +20,13 @@
 #define TIMEOUT 2000
 
 // define cylinder 
-const String cylinder  = "1";
+#define cylinder  1
 
 // define stroke 
-const String stroke = "2";
+#define stroke 2
 
 // define incompressible
-const String incompressible = "20";
+#define incompressible 20
 
 // define SSID
 const char *ssid = "transmic_cdi";
@@ -316,7 +316,7 @@ void handleGenericArgs() { //Handler
 	message += server.args();            //Get number of parameters
 	message += "\n";                            //Add a new line
 	String toPIC = "";
-
+	
 	for (int i = 0; i < server.args(); i++) {
 
 		message += "Arg No" + (String)i + " => ";   //Include the current iteration value
@@ -443,9 +443,19 @@ void writeToPIC (String toPIC) {
 
 //////////////////////////////////////////////
 
+float transform (String pos, String adr, String val, String rpm, String computedelay, String steps) {
 
+	// String to int conversion
+	int posToInt = pos.toInt();
+	int adrToInt = adr.toInt();
+	int valToInt = val.toInt();
+	int rpmToInt = rpm.toInt();
+	int computedelayToInt = computedelay.toInt();
+	int stepsToInt = steps.toInt();
 
-
+	float dur1deg = (((1000 * 1000 * 60 * stroke) / (2 * cylinder * rpmToInt)) / 360);
+	float processdelay = (dur1deg * (posToInt - valToInt) - incompressible - computedelayToInt);
+}
 
 
 /*
