@@ -369,13 +369,6 @@ void handleGenericArgs() { //Handler
 		}else if ((adr == "12") || (adr == "13")) {
 			//do something
 		}
-		
-		
-		
-		//raw_data = adr or pos or val for debugging
-		page = "<h1>Writing values to eeprom... </h1><h3>Raw Data:</h3> <h4>"+raw_data+"</h4>";
-	    server.send(200, "text/html", page);
-		//writeToPIC(toPIC);
 	}
 
 }
