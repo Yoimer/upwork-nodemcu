@@ -370,6 +370,8 @@ void handleGenericArgs() { //Handler
 			//do something
 		}
 		
+		
+		
 		//raw_data = adr or pos or val for debugging
 		page = "<h1>Writing values to eeprom... </h1><h3>Raw Data:</h3> <h4>"+raw_data+"</h4>";
 	    server.send(200, "text/html", page);
@@ -410,6 +412,15 @@ float transform (String pos, String adr, String val, String rpm, String computed
 	// Calculations
 	float dur1deg = (((1000 * 1000 * 60 * stroke) / (2 * cylinder * rpmToInt)) / 360);
 	float processdelay = (dur1deg * (posToInt - valToFloat) - incompressible - computedelayToInt);
+	
+	float eeprom = (processdelay / stepsToInt);
+	
+	if (eeprom < 0.0) {
+		eeprom = 0;
+	}
+	
+	// send calculation to PIC
+	writeToPIC(String(eeprom));
 }
 
 /////////////////////////////////////////////////////////////////
