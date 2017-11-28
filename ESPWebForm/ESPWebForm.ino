@@ -400,13 +400,16 @@ float transform (String pos, String adr, String val, String rpm, String computed
 	// String to int conversion
 	int posToInt = pos.toInt();
 	int adrToInt = adr.toInt();
-	int valToInt = val.toInt();
 	int rpmToInt = rpm.toInt();
 	int computedelayToInt = computedelay.toInt();
 	int stepsToInt = steps.toInt();
 
+	// String to float
+    float valToFloat = val.toFloat();
+
+	// Calculations
 	float dur1deg = (((1000 * 1000 * 60 * stroke) / (2 * cylinder * rpmToInt)) / 360);
-	float processdelay = (dur1deg * (posToInt - valToInt) - incompressible - computedelayToInt);
+	float processdelay = (dur1deg * (posToInt - valToFloat) - incompressible - computedelayToInt);
 }
 
 /////////////////////////////////////////////////////////////////
