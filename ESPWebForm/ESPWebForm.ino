@@ -1,4 +1,4 @@
-/*
+ /*
  * Demonstrate using an http server and an HTML form to control an LED.
  * The http server runs on the ESP8266.
  *
@@ -76,61 +76,61 @@ String val = "";
 
 String BODY_2_3=
 "<tr>\r\n"
-"	<td>\r\n"
-"		<form action=\"/\" method=GET>\r\n"
-"			<font color=blue>PICKUP POLARITY:</font><br>\r\n"
+"  <td>\r\n"
+"   <form action=\"/\" method=GET>\r\n"
+"     <font color=blue>PICKUP POLARITY:</font><br>\r\n"
 "           <input type=\"radio\" name=\"pos-pickup\" value=\"000\">NP<font color=grey>(0)</font>"  
 "           <input type=\"radio\" name=\"pos-pickup\" value=\"001\" checked>PN<font color=grey>(1)</font>"
-"			&nbsp; &nbsp; <input type=submit value=\"Send to CDI\">\r\n"
-"		</form>\r\n"
-"	</td>\r\n"
+"     &nbsp; &nbsp; <input type=submit value=\"Send to CDI\">\r\n"
+"   </form>\r\n"
+" </td>\r\n"
 "</tr>\r\n"
 "\r\n"
 "<foot>\r\n"
-"	<td>\r\n"
-"		<div id=\"formulaire\"> \r\n"
-"			<form action=\"/dump\" method=GET>\r\n"
-"				<input type=submit value=\"Dump\">\r\n"
-"			</form>\r\n"
-"			<form action=\"/\" method=POST>\r\n"
-"				<input type=submit value=\"Home\">\r\n"
-"			</form>\r\n"
-"			<form action=\"/clear\" method=POST>\r\n"
-"				<input type=submit value=\"Clear display\">\r\n"
-"			</form>\r\n"
-"		</div>\r\n"
-"	</td>\r\n"
+" <td>\r\n"
+"   <div id=\"formulaire\"> \r\n"
+"     <form action=\"/dump\" method=GET>\r\n"
+"       <input type=submit value=\"Dump\">\r\n"
+"     </form>\r\n"
+"     <form action=\"/\" method=POST>\r\n"
+"       <input type=submit value=\"Home\">\r\n"
+"     </form>\r\n"
+"     <form action=\"/clear\" method=POST>\r\n"
+"       <input type=submit value=\"Clear display\">\r\n"
+"     </form>\r\n"
+"   </div>\r\n"
+" </td>\r\n"
 "</foot>\r\n"
 "\r\n"
 "<tr>\r\n"
-"	<td>\r\n"
-"		<form action=\"/\" method=GET>\r\n"
-"			<font color=blue>KICK START:</font> &nbsp; &nbsp; <input type=\"text\" size=\"3\" name=\"adr_12\" value=\"10\">ms\r\n"
-"			&nbsp; &nbsp; <input type=submit value=\"Send to CDI\">\r\n"
-"		</form>\r\n"
-"	</td>\r\n"
+" <td>\r\n"
+"   <form action=\"/\" method=GET>\r\n"
+"     <font color=blue>KICK START:</font> &nbsp; &nbsp; <input type=\"text\" size=\"3\" name=\"adr_12\" value=\"10\">ms\r\n"
+"     &nbsp; &nbsp; <input type=submit value=\"Send to CDI\">\r\n"
+"   </form>\r\n"
+" </td>\r\n"
 "</tr>\r\n"
 "\r\n"
 "<form action=\"/\" method=GET>\r\n"
-"	<font color=blue>PICKUP POSITION:</font> &nbsp; &nbsp; <input type=\"text\" size=\"3\" name=\"pos\" value=\"52\">&deg; BTDC\r\n"
-"	<p>\r\n"
-"		<font color=blue>ADVANCE CURVE:</font> &nbsp; &nbsp; <input type=submit value=\"Send to CDI\">\r\n"
-"	</p>\r\n"
-"	RPM:\r\n"
-"	<select name=\"adr\">\r\n"
-"		<option value=11>500\r\n"
-"		<option value=01>1000\r\n"
-"		<option value=02>2000\r\n"
-"		<option value=03>3000\r\n"
-"		<option value=04>4000\r\n"
-"		<option value=05>5000\r\n"
-"		<option value=06>6000\r\n"
-"		<option value=07>7000\r\n"
-"		<option value=08>8000\r\n"
-"		<option value=09>9000\r\n"
-"		<option value=10>10000\r\n"
-"	</select>\r\n"
-"	&nbsp; VALUE: <input type=text name=val value=20 size=3> \r\n"
+" <font color=blue>PICKUP POSITION:</font> &nbsp; &nbsp; <input type=\"text\" size=\"3\" name=\"pos\" value=\"52\">&deg; BTDC\r\n"
+" <p>\r\n"
+"   <font color=blue>ADVANCE CURVE:</font> &nbsp; &nbsp; <input type=submit value=\"Send to CDI\">\r\n"
+" </p>\r\n"
+" RPM:\r\n"
+" <select name=\"adr\">\r\n"
+"   <option value=11>500\r\n"
+"   <option value=01>1000\r\n"
+"   <option value=02>2000\r\n"
+"   <option value=03>3000\r\n"
+"   <option value=04>4000\r\n"
+"   <option value=05>5000\r\n"
+"   <option value=06>6000\r\n"
+"   <option value=07>7000\r\n"
+"   <option value=08>8000\r\n"
+"   <option value=09>9000\r\n"
+"   <option value=10>10000\r\n"
+" </select>\r\n"
+" &nbsp; VALUE: <input type=text name=val value=20 size=3> \r\n"
 "</form>\r\n"
 "\r\n"
 "<font color=blue>EPROM:</font>\r\n";
@@ -232,7 +232,8 @@ void handleDump()
   // it reads every char before getting to
   // E and displays it on console and browser too
   sendPICcommand("99 000", "E", TIMEOUT, 1);
-  page = "<h1>Values saved on eeprom </h1><h3>Raw Data:</h3> <h4>"+raw_data+"</h4>";
+  //page = "<h1>Values saved on eeprom </h1><h3>Raw Data:</h3> <h4>"+raw_data+"</h4>";
+  page = "<h1>Values saved on eeprom </h1><h3>Raw Data:</h3> <pre>"+raw_data+"</h4>";
   server.send(200, "text/html", page);
 }
 
@@ -305,70 +306,72 @@ void handleCDI()
 
 void handleGenericArgs() { //Handler
 
-	//char PICcommand [20];
+  //char PICcommand [20];
 
-	String message = "Number of args received:";
-	message += server.args();            //Get number of parameters
-	message += "\n";                            //Add a new line
-	String toPIC = "";
-	
-	for (int i = 0; i < server.args(); i++) {
+  String message = "Number of args received:";
+  message += server.args();            //Get number of parameters
+  message += "\n";                            //Add a new line
+  String toPIC = "";
+  
+  for (int i = 0; i < server.args(); i++) {
 
-		message += "Arg No" + (String)i + " => ";   //Include the current iteration value
-		message += server.argName(i) + ": ";     //Get the name of the parameter
-		message += server.arg(i) + "\n";              //Get the value of the parameter
-		toPIC += server.arg(i) + " ";
-	}
-	
-	////server.send(200, "text/plain", message);       //Response to the HTTP request
+    message += "Arg No" + (String)i + " => ";   //Include the current iteration value
+    message += server.argName(i) + ": ";     //Get the name of the parameter
+    message += server.arg(i) + "\n";              //Get the value of the parameter
+    //toPIC += server.arg(i) + " ";
+    toPIC += server.arg(i);
+  }
+  
+  ////server.send(200, "text/plain", message);       //Response to the HTTP request
 
-	if (server.hasArg("adr_12")) {
-		// forces 12 value
-		toPIC = "12 " + toPIC;
-		writeToPIC(toPIC);
-	}else if (server.hasArg("pos-pickup")){
-		// forces 13 value
-		toPIC = "13 " + toPIC;
-		writeToPIC(toPIC);
-	}
-	else if (server.hasArg("adr")){
+  if (server.hasArg("adr_12")) {
+    // forces 12 value , 00 as a separator
+//    toPIC = "12 " + toPIC;
+    toPIC = "1200" + toPIC;
+    writeToPIC(toPIC);
+  }else if (server.hasArg("pos-pickup")){
+    // forces 13 value
+    toPIC = "13 " + toPIC;
+    writeToPIC(toPIC);
+  }
+  else if (server.hasArg("adr")){
 
-		// extracts pos
-		pos = "";
-		pos = toPIC.substring(0, toPIC.indexOf(32));
+    // extracts pos
+    pos = "";
+    pos = toPIC.substring(0, toPIC.indexOf(32));
 
-		// extracts adr
-		adr = "";
-		adr = toPIC.substring((toPIC.indexOf(32) + 1), toPIC.indexOf(32, toPIC.indexOf(32) + 1));
+    // extracts adr
+    adr = "";
+    adr = toPIC.substring((toPIC.indexOf(32) + 1), toPIC.indexOf(32, toPIC.indexOf(32) + 1));
 
-		// extracts val
-		val = "";
-		val = toPIC.substring(toPIC.indexOf(32, toPIC.indexOf(32) + 1), toPIC.indexOf(-1));
-		
-		if (adr == "01") {
-			transform(pos, adr, val, "1000", "87", "100");
-		}else if (adr == "02") {
-			transform(pos, adr, val, "2000", "81", "20");
-		}else if (adr == "03") {
-			transform(pos, adr, val, "3000", "81", "20");
-		}else if (adr == "04") {
-			transform(pos, adr, val, "4000", "69", "20");
-		}else if (adr == "05") {
-			transform(pos, adr, val, "5000", "63", "20");
-		}else if (adr == "06") {
-			transform(pos, adr, val, "6000", "57", "14");
-		}else if (adr == "07") {
-			transform(pos, adr, val, "7000", "51", "14");
-		}else if (adr == "08") {
-			transform(pos, adr, val, "8000", "45", "14");
-		}else if (adr == "09") {
-			transform(pos, adr, val, "9000", "39", "14");
-		}else if (adr == "10") {
-			transform(pos, adr, val, "10000", "33", "14");
-		}else if (adr == "11") {
-			transform(pos, adr, val, "500", "99", "100");
-		}
-	}
+    // extracts val
+    val = "";
+    val = toPIC.substring(toPIC.indexOf(32, toPIC.indexOf(32) + 1), toPIC.indexOf(-1));
+    
+    if (adr == "01") {
+      transform(pos, adr, val, "1000", "87", "100");
+    }else if (adr == "02") {
+      transform(pos, adr, val, "2000", "81", "20");
+    }else if (adr == "03") {
+      transform(pos, adr, val, "3000", "81", "20");
+    }else if (adr == "04") {
+      transform(pos, adr, val, "4000", "69", "20");
+    }else if (adr == "05") {
+      transform(pos, adr, val, "5000", "63", "20");
+    }else if (adr == "06") {
+      transform(pos, adr, val, "6000", "57", "14");
+    }else if (adr == "07") {
+      transform(pos, adr, val, "7000", "51", "14");
+    }else if (adr == "08") {
+      transform(pos, adr, val, "8000", "45", "14");
+    }else if (adr == "09") {
+      transform(pos, adr, val, "9000", "39", "14");
+    }else if (adr == "10") {
+      transform(pos, adr, val, "10000", "33", "14");
+    }else if (adr == "11") {
+      transform(pos, adr, val, "500", "99", "100");
+    }
+  }
 
 }
 
@@ -376,43 +379,44 @@ void handleGenericArgs() { //Handler
 
 void writeToPIC (String toPIC) {
 
-	char PICcommand [20];
-	// converts String object into char array
-	toPIC.toCharArray(PICcommand, 20);
-	// Uncoment just for debugging
-	////Serial.println("PICcommand");
-	////Serial.println(PICcommand);
-	sendPICcommand(PICcommand, "OK", TIMEOUT, 1);
-	page = "<h1>Writing values to eeprom... </h1><h3>Raw Data:</h3> <h4>"+raw_data+"</h4>";
-	server.send(200, "text/html", page);
+  char PICcommand [20];
+  // converts String object into char array
+  toPIC.toCharArray(PICcommand, 20);
+  // Uncoment just for debugging
+  ////Serial.println("PICcommand");
+  ////Serial.println(PICcommand);
+  sendPICcommand(PICcommand, "OK", TIMEOUT, 1);
+  page = "<h1>Writing values to eeprom... </h1><h3>Raw Data:</h3> <h4>"+raw_data+"</h4>";
+  server.send(200, "text/html", page);
 }
 
 //////////////////////////////////////////////
 
 float transform (String pos, String adr, String val, String rpm, String computedelay, String steps) {
 
-	// String to int conversion
-	int posToInt = pos.toInt();
-	int adrToInt = adr.toInt();
-	int rpmToInt = rpm.toInt();
-	int computedelayToInt = computedelay.toInt();
-	int stepsToInt = steps.toInt();
+  // String to int conversion
+  int posToInt = pos.toInt();
+  int adrToInt = adr.toInt();
+  int rpmToInt = rpm.toInt();
+  int computedelayToInt = computedelay.toInt();
+  int stepsToInt = steps.toInt();
 
-	// String to float
+  // String to float
     float valToFloat = val.toFloat();
 
-	// Calculations
-	float dur1deg = (((1000 * 1000 * 60 * stroke) / (2 * cylinder * rpmToInt)) / 360);
-	float processdelay = (dur1deg * (posToInt - valToFloat) - incompressible - computedelayToInt);
-	
-	float eeprom = (processdelay / stepsToInt);
-	
-	if (eeprom < 0.0) {
-		eeprom = 0;
-	}
-	
-	// send calculation to PIC
-	writeToPIC((adr + " " + String(round(eeprom))));
+  // Calculations
+  float dur1deg = (((1000 * 1000 * 60 * stroke) / (2 * cylinder * rpmToInt)) / 360);
+  float processdelay = (dur1deg * (posToInt - valToFloat) - incompressible - computedelayToInt);
+  
+  float eeprom = (processdelay / stepsToInt);
+  
+  if (eeprom < 0.0) {
+    eeprom = 0;
+  }
+   
+  // send calculation to PIC
+ writeToPIC((adr + "00" + String(round(eeprom))));
+  
 }
 
 /////////////////////////////////////////////////////////////////
@@ -462,3 +466,4 @@ int8_t sendPICcommand(char* PICcommand, char* expected_answer, unsigned int time
 
   return answer;
 }
+
