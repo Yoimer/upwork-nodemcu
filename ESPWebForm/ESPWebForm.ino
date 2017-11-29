@@ -366,8 +366,6 @@ void handleGenericArgs() { //Handler
 			transform(pos, adr, val, "10000", "33", "14");
 		}else if (adr == "11") {
 			transform(pos, adr, val, "500", "99", "100");
-		}else if ((adr == "12") || (adr == "13")) {
-			//do something
 		}
 	}
 
@@ -413,7 +411,7 @@ float transform (String pos, String adr, String val, String rpm, String computed
 	}
 	
 	// send calculation to PIC
-	writeToPIC(String(eeprom));
+	writeToPIC((adr + " " + String(eeprom)));
 }
 
 /////////////////////////////////////////////////////////////////
