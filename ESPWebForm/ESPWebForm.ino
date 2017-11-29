@@ -15,6 +15,7 @@
 #include <ESP8266WiFi.h>
 #include <ESP8266WebServer.h>
 #include <DNSServer.h>
+#include <math.h>
 
 // define timeout for expected answer from PIC
 #define TIMEOUT 2000
@@ -411,7 +412,7 @@ float transform (String pos, String adr, String val, String rpm, String computed
 	}
 	
 	// send calculation to PIC
-	writeToPIC((adr + " " + String(eeprom)));
+	writeToPIC((adr + " " + String(round(eeprom))));
 }
 
 /////////////////////////////////////////////////////////////////
