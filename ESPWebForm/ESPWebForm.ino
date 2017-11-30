@@ -414,31 +414,11 @@ float transform (String pos, String adr, String val, String rpm, String computed
 		eeprom = 0;
 	}
 	
-	// round eeprom
-	//eeprom = round(eeprom);
-
-	// floor eeprom
-	//eeprom = floor(eeprom);
-	
 	// trucate eeprom with integer
-	eeprom = int(eeprom);
-	Serial.println(eeprom);
-
-	// send calculation to PIC
-	//writeToPIC((adr + " " + String(round(eeprom))));
-	
-	/////////////////////////////////////////////////
-	// 2. Include Integer
-	/////////////////////////////////////////////////
-	///snprintf( message, sizeof(message), "%03d", eeprom);
-
-	///Serial.println(message);
-	
-	// send calculation to PIC
-	//sendPICcommand(message, "OK", TIMEOUT, 1 );
-
-	//page = "<h1>Writing values to eeprom... </h1><h3>Raw Data:</h3> <h4>"+raw_data+"</h4>";
-	//server.send(200, "text/html", page);
+	int integer = round(eeprom);
+	char str[3] = "";
+	sprintf(str, "%03d", integer);
+	Serial.println(str);
 }
 
 /////////////////////////////////////////////////////////////////
