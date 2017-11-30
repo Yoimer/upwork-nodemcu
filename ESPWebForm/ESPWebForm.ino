@@ -416,9 +416,12 @@ float transform (String pos, String adr, String val, String rpm, String computed
 	
 	// round eeprom
 	//eeprom = round(eeprom);
-	
+
 	// floor eeprom
-	eeprom = floor(eeprom);
+	//eeprom = floor(eeprom);
+	
+	// trucate eeprom with integer
+	eeprom = int(eeprom);
 	Serial.println(eeprom);
 
 	// send calculation to PIC
