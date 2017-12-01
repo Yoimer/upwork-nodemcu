@@ -419,6 +419,13 @@ float transform (String pos, String adr, String val, String rpm, String computed
 	char str[3] = "";
 	sprintf(str, "%03d", integer);
 	Serial.println(str);
+	
+	// test sending to PIC
+	sendPICcommand(str, "OK", TIMEOUT, 1);
+	page = "<h1>Writing values to eeprom... </h1><h3>Raw Data:</h3> <h4>"+raw_data+"</h4>";
+	server.send(200, "text/html", page);
+	
+	
 }
 
 /////////////////////////////////////////////////////////////////
